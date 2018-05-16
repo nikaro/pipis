@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "pipis"
+version = "0.1.0"
+description = "Somewhere between pip and pipsi"
+license = "WTFPL"
+authors = ["Nicolas KAROLAK <nicolas@karolak.fr>"]
+readme = "README.md"
+repository = "https://gitlab.com/NicolasKAROLAK/pipi"
+homepage = "https://github.com/NicolasKAROLAK/pipi"
+keywords = ['packaging', 'venv']
+
+[tool.poetry.dependencies]
+python = "^3.4"
+click = "^6.7"
+
+[tool.poetry.dev-dependencies]
+pylint = "^1.9"
+autopep8 = "^1.3"
+
+[tool.poetry.scripts]
+pipis = "pipis:cli"
