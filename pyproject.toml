@@ -7,7 +7,19 @@ authors = ["Nicolas KAROLAK <nicolas@karolak.fr>"]
 readme = "README.md"
 repository = "https://gitlab.com/NicolasKAROLAK/pipis"
 homepage = "https://github.com/NicolasKAROLAK/pipis"
-keywords = ['packaging', 'venv']
+keywords = ["packaging", "pip", "venv"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Natural Language :: English",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: System :: Installation/Setup",
+    "Topic :: System :: Software Distribution"
+]
 
 [tool.poetry.dependencies]
 python = "^3.4"
