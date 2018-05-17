@@ -20,7 +20,7 @@ Because i do not care about Python 2, and `virtualenv` copies python's binaries 
 ## How to install
 
 ```
-python3 -m venv ~/.local/{bin,venvs/pipis}
+python3 -m venv ~/.local/venvs/pipis
 source ~/.local/venvs/pipis/bin/activate
 pip install -U pip
 pip install pipis
