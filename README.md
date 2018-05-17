@@ -83,7 +83,7 @@ $ pipis install --yes awscli
 Installing  [####################################]  100%
 ```
 
-# Update package(s)
+### Update package(s)
 
 ```
 $ pipis update ansible
