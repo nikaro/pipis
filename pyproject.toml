@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pipis"
-version = "0.1.0"
+version = "1.0.0"
 description = "Somewhere between pip and pipsi"
 license = "WTFPL"
 authors = ["Nicolas KAROLAK <nicolas@karolak.fr>"]
@@ -9,7 +9,7 @@ repository = "https://gitlab.com/NicolasKAROLAK/pipis"
 homepage = "https://github.com/NicolasKAROLAK/pipis"
 keywords = ["packaging", "pip", "venv"]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 4 - Beta",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
