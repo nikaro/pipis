@@ -20,10 +20,12 @@ Because i do not care about Python 2, and `virtualenv` copies python's binaries 
 ## How to install
 
 ```
-python3 -m venv ~/.local/venvs/pipis
-source ~/.local/venvs/pipis/bn/activate
+python3 -m venv ~/.local/{bin,venvs/pipis}
+source ~/.local/venvs/pipis/bin/activate
+pip install -U pip
 pip install pipis
 deactivate
+ln -s ~/.local/venvs/pipis/bin/pipis ~/.local/bin/pipis
 ```
 
 ## How to update

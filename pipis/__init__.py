@@ -1,6 +1,8 @@
 import click
+import importlib
 from operator import methodcaller
 import os
+import pkg_resources
 from shutil import rmtree
 from subprocess import check_call, check_output
 import sys
@@ -22,7 +24,7 @@ def _get_console_scripts(venv_dir, venv_py, package):
         [venv_py, '-c', 'import sys; print(sys.path[-1])']).decode("utf-8").strip()
     sys.path.append(venv_path)
     # get informations about package
-    import pkg_resources
+    importlib.reload(pkg_resources)
     dist = pkg_resources.get_distribution(package)
     # init list
     entry_points = []
@@ -47,6 +49,9 @@ def _get_console_scripts(venv_dir, venv_py, package):
     # filter only binaries
     entry_points = list(filter(methodcaller(
         'startswith', venv_bin_dir), entry_points))
+
+    # remove package venv from current path
+    del sys.path[-1]
 
     return entry_points
 
