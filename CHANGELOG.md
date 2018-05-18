@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+- Add `freeze` command to output installed packages in requirements format.
 - Add command to show pipis version.
 
 ### Changed

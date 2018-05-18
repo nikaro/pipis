@@ -89,9 +89,11 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 @click.group(context_settings=CONTEXT_SETTINGS)
 def cli():
     """
-    Pipis is a wrapper around venv and pip which installs python packages into separate venvs to shield them from your system and each other.
+    Pipis is a wrapper around venv and pip which installs python packages into
+    separate venvs to shield them from your system and each other.
 
-    It creates a venv in `~/.local/venvs/<package>`, update pip, installs the package, and links the package's scripts to `~/.local/bin/`.
+    It creates a venv in `~/.local/venvs/<package>`, update pip, installs the
+    package, and links the package's scripts to `~/.local/bin/`.
     """
     pass
 
@@ -110,6 +112,14 @@ def list_installed():
     for package in sorted(os.listdir(VENV_ROOT_DIR)):
         version = _get_version(package)
         click.echo('  - {} ({})'.format(package, version))
+
+
+@cli.command(context_settings=CONTEXT_SETTINGS)
+def freeze():
+    """Output installed packages in requirements format."""
+    for package in sorted(os.listdir(VENV_ROOT_DIR)):
+        version = _get_version(package)
+        click.echo('{}=={}'.format(package, version))
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS, short_help='Install packages.')
@@ -255,6 +265,7 @@ def uninstall(requirement, name):
                 rmtree(venv_dir)
             else:
                 click.secho(' is not installed, skip', fg='yellow')
+
 
 if __name__ == '__main__':
     cli()
