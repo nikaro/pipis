@@ -115,7 +115,7 @@ def install(requirement, name):
 
 @cli.command()
 @click.confirmation_option()
-@click.argument('name', nargs=-1, required=False, type=click.STRING)
+@click.argument('name', nargs=-1, type=click.STRING)
 def update(name):
     if not name:
         name = os.listdir(VENV_ROOT_DIR)
