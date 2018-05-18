@@ -78,31 +78,46 @@ def _show_package(package):
         return package
 
 
-@click.group()
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+
+
+@click.group(context_settings=CONTEXT_SETTINGS)
 def cli():
+    """
+    Pipis is a wrapper around venv and pip which installs python packages into separate venvs to shield them from your system and each other.
+
+    It creates a venv in `~/.local/venvs/<package>`, update pip, installs the package, and links the package's scripts to `~/.local/bin/`.
+    """
     pass
 
 
-@cli.command()
+@cli.command(context_settings=CONTEXT_SETTINGS)
 def version():
     """Show version and exit."""
     version = _get_version(__name__)
     click.echo(version)
 
 
-@cli.command('list')
+@cli.command('list', context_settings=CONTEXT_SETTINGS)
 def list_installed():
+    """List installed packages."""
     click.echo('Installed:')
     for package in sorted(os.listdir(VENV_ROOT_DIR)):
         version = _get_version(package)
         click.echo('  - {} ({})'.format(package, version))
 
 
-@cli.command()
+@cli.command(context_settings=CONTEXT_SETTINGS, short_help='Install packages.')
 @click.confirmation_option()
-@click.option('-r', '--requirement')
+@click.option('-r', '--requirement', help='Install from the given requirements file.')
 @click.argument('name', nargs=-1, type=click.STRING)
 def install(requirement, name):
+    """
+    Install packages, where NAME is the package name.
+    You can specify multiple names.
+
+    Packages names and "requirements files" are mutually exclusive.
+    """
     # check presence of args
     if not (requirement or name):
         raise click.UsageError('missing arguments/options')
@@ -141,12 +156,20 @@ def install(requirement, name):
                 click.secho(' is already installed, skip', fg='green')
 
 
-
-@cli.command()
+@cli.command(context_settings=CONTEXT_SETTINGS, short_help='Update packages.')
 @click.confirmation_option()
-@click.option('-r', '--requirement')
+@click.option('-r', '--requirement', help='Install from the given requirements file.')
 @click.argument('name', nargs=-1, type=click.STRING)
 def update(requirement, name):
+    """
+    Update packages, where NAME is the package name.
+    You can specify multiple names.
+
+    Packages names and "requirements files" are mutually exclusive.
+
+    If you do not specify package name or requirements file, it will update
+    all installed packages.
+    """
     # check mutually esclusive args
     if requirement and name:
         raise click.UsageError('too much arguments/options')
@@ -182,11 +205,17 @@ def update(requirement, name):
                     os.symlink(script, link)
 
 
-@cli.command()
+@cli.command(context_settings=CONTEXT_SETTINGS, short_help='Uninstall packages.')
 @click.confirmation_option()
-@click.option('-r', '--requirement')
+@click.option('-r', '--requirement', help='Install from the given requirements file.')
 @click.argument('name', nargs=-1, type=click.STRING)
 def uninstall(requirement, name):
+    """
+    Uninstall packages, where NAME is the package name.
+    You can specify multiple names.
+
+    Packages names and "requirements files" are mutually exclusive.
+    """
     # check presence of args
     if not (requirement or name):
         raise click.UsageError('missing arguments/options')
