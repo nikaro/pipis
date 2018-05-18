@@ -1,12 +1,17 @@
-import click
+"""
+'pipis' stands for 'pip isolated'
+"""
+
 import importlib
 from operator import methodcaller
 import os
-import pkg_resources
 from shutil import rmtree
 from subprocess import check_call, check_output
 import sys
 from venv import create
+
+import click
+import pkg_resources
 
 VENV_ROOT_DIR = os.path.expanduser('~/.local/venvs/')
 BIN_DIR = os.path.expanduser('~/.local/bin/')
@@ -73,14 +78,13 @@ def _get_console_scripts(package):
     return entry_points
 
 
-def _abort_if_false(ctx, param, value):
+def _abort_if_false(ctx, _, value):
     if not value:
         ctx.abort()
 
 
 def _show_package(package):
-    if package is not None:
-        return package
+    return package
 
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -101,8 +105,8 @@ def cli():
 @cli.command(context_settings=CONTEXT_SETTINGS)
 def version():
     """Show version and exit."""
-    version = _get_version(__name__)
-    click.echo(version)
+    package_version = _get_version(__name__)
+    click.echo(package_version)
 
 
 @cli.command('list', context_settings=CONTEXT_SETTINGS)
@@ -110,23 +114,24 @@ def list_installed():
     """List installed packages."""
     click.echo('Installed:')
     for package in sorted(os.listdir(VENV_ROOT_DIR)):
-        version = _get_version(package)
-        click.echo('  - {} ({})'.format(package, version))
+        package_version = _get_version(package)
+        click.echo('  - {} ({})'.format(package, package_version))
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
 def freeze():
     """Output installed packages in requirements format."""
     for package in sorted(os.listdir(VENV_ROOT_DIR)):
-        version = _get_version(package)
-        click.echo('{}=={}'.format(package, version))
+        package_version = _get_version(package)
+        click.echo('{}=={}'.format(package, package_version))
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS, short_help='Install packages.')
 @click.option('-y', '--yes', is_flag=True, callback=_abort_if_false,
               prompt='Do you want to continue?', expose_value=False,
               help='Confirm the action without prompting.')
-@click.option('-r', '--requirement', help='Install from the given requirements file.')
+@click.option('-r', '--requirement',
+              help='Install from the given requirements file.')
 @click.argument('name', nargs=-1, type=click.STRING)
 def install(requirement, name):
     """
@@ -149,7 +154,8 @@ def install(requirement, name):
         except IOError:
             raise click.FileError(requirement)
     # process packages
-    with click.progressbar(name, label='Installing', item_show_func=_show_package) as packages:
+    with click.progressbar(name, label='Installing',
+                           item_show_func=_show_package) as packages:
         for package in packages:
             venv_dir, venv_py = _get_venv_data(package)
             cmd = [venv_py, '-m', 'pip', 'install', '--quiet']
@@ -177,7 +183,8 @@ def install(requirement, name):
 @click.option('-y', '--yes', is_flag=True, callback=_abort_if_false,
               prompt='Do you want to continue?', expose_value=False,
               help='Confirm the action without prompting.')
-@click.option('-r', '--requirement', help='Install from the given requirements file.')
+@click.option('-r', '--requirement',
+              help='Install from the given requirements file.')
 @click.argument('name', nargs=-1, type=click.STRING)
 def update(requirement, name):
     """
@@ -202,7 +209,8 @@ def update(requirement, name):
     # populate packages list with all currently installed
     if not name:
         name = os.listdir(VENV_ROOT_DIR)
-    with click.progressbar(name, label='Updating', item_show_func=_show_package) as packages:
+    with click.progressbar(name, label='Updating',
+                           item_show_func=_show_package) as packages:
         for package in packages:
             venv_dir, venv_py = _get_venv_data(package)
             if not os.path.isdir(venv_dir):
@@ -224,11 +232,13 @@ def update(requirement, name):
                     os.symlink(script, link)
 
 
-@cli.command(context_settings=CONTEXT_SETTINGS, short_help='Uninstall packages.')
+@cli.command(context_settings=CONTEXT_SETTINGS,
+             short_help='Uninstall packages.')
 @click.option('-y', '--yes', is_flag=True, callback=_abort_if_false,
               prompt='Do you want to continue?', expose_value=False,
               help='Confirm the action without prompting.')
-@click.option('-r', '--requirement', help='Install from the given requirements file.')
+@click.option('-r', '--requirement',
+              help='Install from the given requirements file.')
 @click.argument('name', nargs=-1, type=click.STRING)
 def uninstall(requirement, name):
     """

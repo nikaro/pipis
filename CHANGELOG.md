@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add short from `-y` for `--yes` argument.
 - Factorize duplicate code.
 
+### Fixed
+- Fix pep8 and pylint warnings.
+
 ## [1.1.0] - 2018-05-18
 ### Added
 - Add `-r/--requirement` for the `remove` command to allow passing `requirements.txt` file.
