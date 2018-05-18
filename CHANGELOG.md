@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- add `-r/--requirement` for the `install` command to allow passing `requirements.txt` file
 
 ## [1.0.1] - 2017-05-17
 ### Fixed
