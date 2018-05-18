@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+- Add `-r/--requirement` for the `remove` command to allow passing `requirements.txt` file.
 - Add `-r/--requirement` for the `update` command to allow passing `requirements.txt` file.
 - Add `-r/--requirement` for the `install` command to allow passing `requirements.txt` file.
 
