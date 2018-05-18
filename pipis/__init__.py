@@ -73,6 +73,11 @@ def _get_console_scripts(package):
     return entry_points
 
 
+def _abort_if_false(ctx, param, value):
+    if not value:
+        ctx.abort()
+
+
 def _show_package(package):
     if package is not None:
         return package
@@ -108,7 +113,9 @@ def list_installed():
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS, short_help='Install packages.')
-@click.confirmation_option()
+@click.option('-y', '--yes', is_flag=True, callback=_abort_if_false,
+              prompt='Do you want to continue?', expose_value=False,
+              help='Confirm the action without prompting.')
 @click.option('-r', '--requirement', help='Install from the given requirements file.')
 @click.argument('name', nargs=-1, type=click.STRING)
 def install(requirement, name):
@@ -157,7 +164,9 @@ def install(requirement, name):
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS, short_help='Update packages.')
-@click.confirmation_option()
+@click.option('-y', '--yes', is_flag=True, callback=_abort_if_false,
+              prompt='Do you want to continue?', expose_value=False,
+              help='Confirm the action without prompting.')
 @click.option('-r', '--requirement', help='Install from the given requirements file.')
 @click.argument('name', nargs=-1, type=click.STRING)
 def update(requirement, name):
@@ -206,7 +215,9 @@ def update(requirement, name):
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS, short_help='Uninstall packages.')
-@click.confirmation_option()
+@click.option('-y', '--yes', is_flag=True, callback=_abort_if_false,
+              prompt='Do you want to continue?', expose_value=False,
+              help='Confirm the action without prompting.')
 @click.option('-r', '--requirement', help='Install from the given requirements file.')
 @click.argument('name', nargs=-1, type=click.STRING)
 def uninstall(requirement, name):
