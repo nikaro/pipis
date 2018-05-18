@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Show version beside package name in `list` command.
 - Improve existing and add new help texts.
 - Add short from `-y` for `--yes` argument.
+- Factorize duplicate code.
 
 ## [1.1.0] - 2018-05-18
 ### Added
