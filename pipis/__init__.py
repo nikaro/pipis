@@ -12,20 +12,40 @@ VENV_ROOT_DIR = os.path.expanduser('~/.local/venvs/')
 BIN_DIR = os.path.expanduser('~/.local/bin/')
 
 
-def _show_package(package):
-    if package is not None:
-        return package
+def _get_venv_data(package):
+    venv_dir = os.path.join(VENV_ROOT_DIR, package)
+    venv_py = os.path.join(venv_dir, 'bin', 'python')
+
+    return venv_dir, venv_py
 
 
-def _get_console_scripts(venv_dir, venv_py, package):
-    venv_bin_dir = os.path.join(venv_dir, 'bin')
+def _get_dist(package):
+    _, venv_py = _get_venv_data(package)
     # get the module path from its venv and append it to the current path
-    venv_path = check_output(
-        [venv_py, '-c', 'import sys; print(sys.path[-1])']).decode("utf-8").strip()
+    cmd_last_path = 'import sys; print(sys.path[-1])'
+    venv_path = check_output([venv_py, '-c', cmd_last_path])
+    venv_path = venv_path.decode("utf-8").strip()
     sys.path.append(venv_path)
-    # get informations about package
+    # reload pkg_resources module to take into account new path
     importlib.reload(pkg_resources)
+    # get informations about package
     dist = pkg_resources.get_distribution(package)
+    # remove package venv from current path
+    del sys.path[-1]
+
+    return dist
+
+
+def _get_version(package):
+    dist = _get_dist(package)
+
+    return dist.version
+
+
+def _get_console_scripts(package):
+    venv_dir, _ = _get_venv_data(package)
+    # get informations about package
+    dist = _get_dist(package)
     # init list
     entry_points = []
     # get entry_points from RECORD file
@@ -48,12 +68,14 @@ def _get_console_scripts(venv_dir, venv_py, package):
 
     # filter only binaries
     entry_points = list(filter(methodcaller(
-        'startswith', venv_bin_dir), entry_points))
-
-    # remove package venv from current path
-    del sys.path[-1]
+        'startswith', os.path.join(venv_dir, 'bin')), entry_points))
 
     return entry_points
+
+
+def _show_package(package):
+    if package is not None:
+        return package
 
 
 @click.group()
@@ -61,11 +83,19 @@ def cli():
     pass
 
 
+@cli.command()
+def version():
+    """Show version and exit."""
+    version = _get_version(__name__)
+    click.echo(version)
+
+
 @cli.command('list')
 def list_installed():
     click.echo('Installed:')
     for package in sorted(os.listdir(VENV_ROOT_DIR)):
-        click.echo('  - {}'.format(package))
+        version = _get_version(package)
+        click.echo('  - {} ({})'.format(package, version))
 
 
 @cli.command()
@@ -89,8 +119,7 @@ def install(requirement, name):
     # process packages
     with click.progressbar(name, label='Installing', item_show_func=_show_package) as packages:
         for package in packages:
-            venv_dir = os.path.join(VENV_ROOT_DIR, package)
-            venv_py = os.path.join(venv_dir, 'bin', 'python')
+            venv_dir, venv_py = _get_venv_data(package)
             cmd = [venv_py, '-m', 'pip', 'install', '--quiet']
             # create venv if not exists
             if not os.path.isdir(venv_dir):
@@ -102,7 +131,7 @@ def install(requirement, name):
                 cmd.append(package)
                 check_call(cmd)
                 # create scripts symlink
-                scripts = _get_console_scripts(venv_dir, venv_py, package)
+                scripts = _get_console_scripts(package)
                 for script in scripts:
                     script_name = script.split('/')[-1]
                     link = os.path.join(BIN_DIR, script_name)
@@ -133,11 +162,10 @@ def update(requirement, name):
         name = os.listdir(VENV_ROOT_DIR)
     with click.progressbar(name, label='Updating', item_show_func=_show_package) as packages:
         for package in packages:
-            venv_dir = os.path.join(VENV_ROOT_DIR, package)
+            venv_dir, venv_py = _get_venv_data(package)
             if not os.path.isdir(venv_dir):
                 click.secho(' is not installed, skip', fg='yellow')
                 continue
-            venv_py = os.path.join(venv_dir, 'bin', 'python')
             cmd = [venv_py, '-m', 'pip', 'install', '--quiet']
             # upgrade pip in venv
             cmd.extend(['--upgrade', 'pip'])
@@ -146,7 +174,7 @@ def update(requirement, name):
             cmd.extend(['--upgrade', package])
             check_call(cmd)
             # update scripts symlink
-            scripts = _get_console_scripts(venv_dir, venv_py, package)
+            scripts = _get_console_scripts(package)
             for script in scripts:
                 script_name = script.split('/')[-1]
                 link = os.path.join(BIN_DIR, script_name)
@@ -175,10 +203,9 @@ def uninstall(requirement, name):
     with click.progressbar(name, label='Removing', item_show_func=_show_package) as packages:
         for package in packages:
             venv_dir = os.path.join(VENV_ROOT_DIR, package)
-            venv_py = os.path.join(venv_dir, 'bin', 'python')
             if os.path.isdir(venv_dir):
                 # remove scripts symlink
-                scripts = _get_console_scripts(venv_dir, venv_py, package)
+                scripts = _get_console_scripts(package)
                 for script in scripts:
                     script_name = script.split('/')[-1]
                     link = os.path.join(BIN_DIR, script_name)
