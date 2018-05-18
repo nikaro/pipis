@@ -105,8 +105,7 @@ def install(requirement, name):
                     if not os.path.islink(link):
                         os.symlink(script, link)
             else:
-                click.secho(' Info: {} is already installed, skipping it'.format(
-                    package), fg='green')
+                click.secho(' is already installed, skip', fg='green')
 
 
 
@@ -120,8 +119,7 @@ def update(name):
         for package in packages:
             venv_dir = os.path.join(VENV_ROOT_DIR, package)
             if not os.path.isdir(venv_dir):
-                click.secho(' Warning: {} is not installed, skipping it'.format(
-                    package), fg='yellow')
+                click.secho(' is not installed, skip', fg='yellow')
                 continue
             venv_py = os.path.join(venv_dir, 'bin', 'python')
             cmd = [venv_py, '-m', 'pip', 'install', '--quiet']
@@ -159,8 +157,7 @@ def uninstall(name):
                 # remove package venv
                 rmtree(venv_dir)
             else:
-                click.secho(' Warning: {} is not installed, skipping it'.format(
-                    package), fg='yellow')
+                click.secho(' is not installed, skip', fg='yellow')
 
 if __name__ == '__main__':
     cli()

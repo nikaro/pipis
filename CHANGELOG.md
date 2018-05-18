@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
-- add `-r/--requirement` for the `install` command to allow passing `requirements.txt` file
+- Add `-r/--requirement` for the `install` command to allow passing `requirements.txt` file.
+
+### Changed
+- Change output information format fo when package are already/not installed.
 
 ## [1.0.1] - 2017-05-17
 ### Fixed
