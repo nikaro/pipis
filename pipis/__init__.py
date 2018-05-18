@@ -73,16 +73,20 @@ def list_installed():
 @click.argument('name', nargs=-1, type=click.STRING)
 @click.confirmation_option()
 def install(requirement, name):
+    # check presence of args
     if not (requirement or name):
         raise click.UsageError('missing arguments/options')
+    # check mutually esclusive args
     if requirement and name:
         raise click.UsageError('too much arguments/options')
+    # populate packages list with req file
     if requirement:
         try:
             with open(requirement, 'r') as req:
                 name = map(str.strip, req.readlines())
         except IOError:
             raise click.FileError(requirement)
+    # process packages
     with click.progressbar(name, label='Installing', item_show_func=_show_package) as packages:
         for package in packages:
             venv_dir = os.path.join(VENV_ROOT_DIR, package)
