@@ -115,8 +115,20 @@ def install(requirement, name):
 
 @cli.command()
 @click.confirmation_option()
+@click.option('-r', '--requirement')
 @click.argument('name', nargs=-1, type=click.STRING)
-def update(name):
+def update(requirement, name):
+    # check mutually esclusive args
+    if requirement and name:
+        raise click.UsageError('too much arguments/options')
+    # populate packages list with req file
+    if requirement:
+        try:
+            with open(requirement, 'r') as req:
+                name = map(str.strip, req.readlines())
+        except IOError:
+            raise click.FileError(requirement)
+    # populate packages list with all currently installed
     if not name:
         name = os.listdir(VENV_ROOT_DIR)
     with click.progressbar(name, label='Updating', item_show_func=_show_package) as packages:
