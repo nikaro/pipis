@@ -69,9 +69,9 @@ def list_installed():
 
 
 @cli.command()
+@click.confirmation_option()
 @click.option('-r', '--requirement')
 @click.argument('name', nargs=-1, type=click.STRING)
-@click.confirmation_option()
 def install(requirement, name):
     # check presence of args
     if not (requirement or name):
