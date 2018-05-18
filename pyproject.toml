@@ -6,7 +6,7 @@ license = "WTFPL"
 authors = ["Nicolas KAROLAK <nicolas@karolak.fr>"]
 readme = "README.md"
 repository = "https://gitlab.com/NicolasKAROLAK/pipis"
-homepage = "https://github.com/NicolasKAROLAK/pipis"
+homepage = "https://gitlab.com/NicolasKAROLAK/pipis"
 keywords = ["packaging", "pip", "venv"]
 classifiers = [
     "Development Status :: 4 - Beta",
