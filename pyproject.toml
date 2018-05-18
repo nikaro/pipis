@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pipis"
-version = "1.0.1"
+version = "1.1.0"
 description = "Somewhere between pip and pipsi"
 license = "WTFPL"
 authors = ["Nicolas KAROLAK <nicolas@karolak.fr>"]
