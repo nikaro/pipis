@@ -12,6 +12,7 @@ from venv import create
 
 import click
 import pkg_resources
+from tabulate import tabulate
 
 VENV_ROOT_DIR = os.path.expanduser('~/.local/venvs/')
 BIN_DIR = os.path.expanduser('~/.local/bin/')
@@ -112,10 +113,12 @@ def version():
 @cli.command('list', context_settings=CONTEXT_SETTINGS)
 def list_installed():
     """List installed packages."""
-    click.echo('Installed:')
+    table = {'Package': [], 'Version': []}
     for package in sorted(os.listdir(VENV_ROOT_DIR)):
         package_version = _get_version(package)
-        click.echo('  - {} ({})'.format(package, package_version))
+        table['Package'].append(package)
+        table['Version'].append(package_version)
+    click.echo(tabulate(table, headers='keys'))
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS)
