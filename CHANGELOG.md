@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Destination venv directory can be set through the environment variable `PIPIS_VENV`.
+- Destination bin directory can be set through the environment variable `PIPIS_BIN`.
+
 ### Changed
 - Format `list` output like pip's one.
 

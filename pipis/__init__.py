@@ -14,12 +14,14 @@ import click
 import pkg_resources
 from tabulate import tabulate
 
-VENV_ROOT_DIR = os.path.expanduser('~/.local/venvs/')
-BIN_DIR = os.path.expanduser('~/.local/bin/')
+DEFAULT_PIPIS_VENVS = '~/.local/venvs/'
+DEFAULT_PIPIS_BIN = '~/.local/bin/'
 
 
 def _get_venv_data(package):
-    venv_dir = os.path.join(VENV_ROOT_DIR, package)
+    PIPIS_VENVS = os.path.expanduser(
+        os.environ.get('PIPIS_VENVS', DEFAULT_PIPIS_VENVS))
+    venv_dir = os.path.join(PIPIS_VENVS, package)
     venv_py = os.path.join(venv_dir, 'bin', 'python')
 
     return venv_dir, venv_py
@@ -113,8 +115,10 @@ def version():
 @cli.command('list', context_settings=CONTEXT_SETTINGS)
 def list_installed():
     """List installed packages."""
+    PIPIS_VENVS = os.path.expanduser(
+        os.environ.get('PIPIS_VENVS', DEFAULT_PIPIS_VENVS))
     table = {'Package': [], 'Version': []}
-    for package in sorted(os.listdir(VENV_ROOT_DIR)):
+    for package in sorted(os.listdir(PIPIS_VENVS)):
         package_version = _get_version(package)
         table['Package'].append(package)
         table['Version'].append(package_version)
@@ -124,7 +128,9 @@ def list_installed():
 @cli.command(context_settings=CONTEXT_SETTINGS)
 def freeze():
     """Output installed packages in requirements format."""
-    for package in sorted(os.listdir(VENV_ROOT_DIR)):
+    PIPIS_VENVS = os.path.expanduser(
+        os.environ.get('PIPIS_VENVS', DEFAULT_PIPIS_VENVS))
+    for package in sorted(os.listdir(PIPIS_VENVS)):
         package_version = _get_version(package)
         click.echo('{}=={}'.format(package, package_version))
 
@@ -143,6 +149,10 @@ def install(requirement, name):
 
     Packages names and "requirements files" are mutually exclusive.
     """
+    PIPIS_VENVS = os.path.expanduser(
+        os.environ.get('PIPIS_VENVS', DEFAULT_PIPIS_VENVS))
+    PIPIS_BIN = os.path.expanduser(
+        os.environ.get('PIPIS_BIN', DEFAULT_PIPIS_BIN))
     # check presence of args
     if not (requirement or name):
         raise click.UsageError('missing arguments/options')
@@ -175,7 +185,7 @@ def install(requirement, name):
                 scripts = _get_console_scripts(package)
                 for script in scripts:
                     script_name = script.split('/')[-1]
-                    link = os.path.join(BIN_DIR, script_name)
+                    link = os.path.join(PIPIS_BIN, script_name)
                     if not os.path.islink(link):
                         os.symlink(script, link)
             else:
@@ -199,6 +209,10 @@ def update(requirement, name):
     If you do not specify package name or requirements file, it will update
     all installed packages.
     """
+    PIPIS_VENVS = os.path.expanduser(
+        os.environ.get('PIPIS_VENVS', DEFAULT_PIPIS_VENVS))
+    PIPIS_BIN = os.path.expanduser(
+        os.environ.get('PIPIS_BIN', DEFAULT_PIPIS_BIN))
     # check mutually esclusive args
     if requirement and name:
         raise click.UsageError('too much arguments/options')
@@ -211,7 +225,7 @@ def update(requirement, name):
             raise click.FileError(requirement)
     # populate packages list with all currently installed
     if not name:
-        name = os.listdir(VENV_ROOT_DIR)
+        name = os.listdir(PIPIS_VENVS)
     with click.progressbar(name, label='Updating',
                            item_show_func=_show_package) as packages:
         for package in packages:
@@ -230,7 +244,7 @@ def update(requirement, name):
             scripts = _get_console_scripts(package)
             for script in scripts:
                 script_name = script.split('/')[-1]
-                link = os.path.join(BIN_DIR, script_name)
+                link = os.path.join(PIPIS_BIN, script_name)
                 if not os.path.islink(link):
                     os.symlink(script, link)
 
@@ -250,6 +264,10 @@ def uninstall(requirement, name):
 
     Packages names and "requirements files" are mutually exclusive.
     """
+    PIPIS_VENVS = os.path.expanduser(
+        os.environ.get('PIPIS_VENVS', DEFAULT_PIPIS_VENVS))
+    PIPIS_BIN = os.path.expanduser(
+        os.environ.get('PIPIS_BIN', DEFAULT_PIPIS_BIN))
     # check presence of args
     if not (requirement or name):
         raise click.UsageError('missing arguments/options')
@@ -266,13 +284,13 @@ def uninstall(requirement, name):
     with click.progressbar(name, label='Removing',
                            item_show_func=_show_package) as packages:
         for package in packages:
-            venv_dir = os.path.join(VENV_ROOT_DIR, package)
+            venv_dir = os.path.join(PIPIS_VENVS, package)
             if os.path.isdir(venv_dir):
                 # remove scripts symlink
                 scripts = _get_console_scripts(package)
                 for script in scripts:
                     script_name = script.split('/')[-1]
-                    link = os.path.join(BIN_DIR, script_name)
+                    link = os.path.join(PIPIS_BIN, script_name)
                     if os.path.islink(link):
                         os.remove(link)
                 # remove package venv
