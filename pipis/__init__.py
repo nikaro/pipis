@@ -149,8 +149,6 @@ def install(requirement, name):
 
     Packages names and "requirements files" are mutually exclusive.
     """
-    PIPIS_VENVS = os.path.expanduser(
-        os.environ.get('PIPIS_VENVS', DEFAULT_PIPIS_VENVS))
     PIPIS_BIN = os.path.expanduser(
         os.environ.get('PIPIS_BIN', DEFAULT_PIPIS_BIN))
     # check presence of args
