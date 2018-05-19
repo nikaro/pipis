@@ -263,7 +263,8 @@ def uninstall(requirement, name):
                 name = map(str.strip, req.readlines())
         except IOError:
             raise click.FileError(requirement)
-    with click.progressbar(name, label='Removing', item_show_func=_show_package) as packages:
+    with click.progressbar(name, label='Removing',
+                           item_show_func=_show_package) as packages:
         for package in packages:
             venv_dir = os.path.join(VENV_ROOT_DIR, package)
             if os.path.isdir(venv_dir):
