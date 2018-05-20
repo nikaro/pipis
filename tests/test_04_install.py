@@ -1,17 +1,15 @@
 import os
+import sys
+sys.path.append('..')
 
 import click
 import pipis
 from click.testing import CliRunner
 
+from helpers import set_env
 import pipis
 
 runner = CliRunner()
-
-
-def set_env(tmpdir):
-    os.environ['PIPIS_VENVS'] = str(tmpdir.mkdir('venvs'))
-    os.environ['PIPIS_BIN'] = str(tmpdir.mkdir('bin'))
 
 
 def test_install_missing(tmpdir):
@@ -50,8 +48,11 @@ def test_install_inexistant_package(tmpdir):
     script = os.path.join(venv, 'bin', package)
     link = os.path.join(os.environ['PIPIS_BIN'], package)
 
+    msg = 'Error: Cannot install {}'.format(package)
+
     result = runner.invoke(pipis.install, ['-y', package])
 
+    assert msg in result.output
     assert not os.path.isdir(venv)
     assert not os.path.isfile(script)
     assert not os.path.islink(link)

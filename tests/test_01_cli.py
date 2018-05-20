@@ -1,16 +1,13 @@
-import os
+import sys
+sys.path.append('..')
 
 import click
 from click.testing import CliRunner
 
+from helpers import set_env
 import pipis
 
 runner = CliRunner()
-
-
-def set_env(tmpdir):
-    os.environ['PIPIS_VENVS'] = str(tmpdir.mkdir('venvs'))
-    os.environ['PIPIS_BIN'] = str(tmpdir.mkdir('bin'))
 
 
 def test_cli(tmpdir):
