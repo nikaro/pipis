@@ -4,7 +4,7 @@ image: python:3
 
 before_script:
   - pip install --no-cache-dir --yes poetry
-  - poetry installs
+  - poetry install
 
 tests:
   script:
