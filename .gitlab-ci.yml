@@ -3,7 +3,7 @@
 image: python:3
 
 before_script:
-  - pip install --no-cache-dir --yes poetry
+  - pip install --no-cache-dir poetry
   - poetry install
 
 tests:
