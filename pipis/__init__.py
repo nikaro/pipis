@@ -158,7 +158,7 @@ def install(requirement, name):
         raise click.UsageError('missing arguments/options')
     # check mutually esclusive args
     if requirement and name:
-        raise click.UsageError('too much arguments/options')
+        raise click.UsageError('too many arguments/options')
     # populate packages list with req file
     if requirement:
         try:
@@ -188,6 +188,10 @@ def install(requirement, name):
                     raise click.BadArgumentUsage(message)
                 # create scripts symlink
                 scripts = _get_console_scripts(package)
+                if len(scripts) < 1:
+                    rmtree(venv_dir)
+                    message = 'Error: library installation is not supported by pipis'
+                    raise click.ClickException(message)
                 for script in scripts:
                     script_name = script.split('/')[-1]
                     link = os.path.join(PIPIS_BIN, script_name)
