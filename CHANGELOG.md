@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Remove venv created in case of inexistant package install attempt
+- Raise error when the package is a library (has no user script)
+- Raise error when the symlink destination already exists
+- Raise error when trying to update an inexistant package
 
 ## [1.2.0]
 ### Added
