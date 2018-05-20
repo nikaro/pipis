@@ -190,13 +190,17 @@ def install(requirement, name):
                 scripts = _get_console_scripts(package)
                 if len(scripts) < 1:
                     rmtree(venv_dir)
-                    message = 'Error: library installation is not supported by pipis'
+                    message = 'library installation is not supported by pipis'
                     raise click.ClickException(message)
                 for script in scripts:
                     script_name = script.split('/')[-1]
                     link = os.path.join(PIPIS_BIN, script_name)
-                    if not os.path.islink(link):
+                    try:
                         os.symlink(script, link)
+                    except FileExistsError:
+                        rmtree(venv_dir)
+                        message = '{} already exists'.format(link)
+                        raise click.ClickException(message)
             else:
                 click.secho(' is already installed, skip', fg='green')
 
