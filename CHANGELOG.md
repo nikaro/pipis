@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Format `list` output like pip's one.
 
+### Fixed
+- Clean venv created in case of inexistant package install attempt
+
 ## [1.2.0]
 ### Added
 - Add `freeze` command to output installed packages in requirements format.

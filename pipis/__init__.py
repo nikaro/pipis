@@ -6,7 +6,7 @@ import importlib
 from operator import methodcaller
 import os
 from shutil import rmtree
-from subprocess import check_call, check_output
+from subprocess import check_call, check_output, CalledProcessError
 import sys
 from venv import create
 
@@ -180,7 +180,12 @@ def install(requirement, name):
                 check_call(cmd)
                 # install package in venv
                 cmd.append(package)
-                check_call(cmd)
+                try:
+                    check_call(cmd)
+                except CalledProcessError:
+                    rmtree(venv_dir)
+                    message = 'Cannot install {}'.format(package)
+                    raise click.BadArgumentUsage(message)
                 # create scripts symlink
                 scripts = _get_console_scripts(package)
                 for script in scripts:
