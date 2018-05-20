@@ -1,0 +1,8 @@
+.pytest_cache/
+.vscode/
+dist/
+pipis/__pycache__/
+pipis/*.pyc
+tests/__pycache__/
+tests/*.pyc
+.coverage
