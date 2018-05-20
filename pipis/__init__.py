@@ -244,8 +244,8 @@ def update(requirement, name):
         for package in packages:
             venv_dir, venv_py = _get_venv_data(package)
             if not os.path.isdir(venv_dir):
-                click.secho(' is not installed, skip', fg='yellow')
-                continue
+                message = '{} is not installed'.format(package)
+                raise click.ClickException(message)
             cmd = [venv_py, '-m', 'pip', 'install', '--quiet']
             # upgrade pip in venv
             cmd.extend(['--upgrade', 'pip'])
