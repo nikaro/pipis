@@ -187,7 +187,7 @@ platform = "*"
 [metadata]
 python-versions = "^3.4"
 platform = "*"
-content-hash = "db1c9723b2f245a83431d618729d7832d00281e9ca657da6144477dda0ee3a83"
+content-hash = "0faafe6b70e5dc4b20844e9472e19d5c3aac432164b04fb6a23cb5c91cf9a83f"
 
 [metadata.hashes]
 astroid = [ "032f6e09161e96f417ea7fad46d3fac7a9019c775f202182c22df0e4f714cb1c", "dea42ae6e0b789b543f728ddae7ddb6740ba33a49fb52c4a4d9cb7bb4aa6ec09",]

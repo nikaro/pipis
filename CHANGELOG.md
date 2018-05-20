@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.3.0]
 ### Added
 - Destination venv directory can be set through the environment variable `PIPIS_VENV`.
 - Destination bin directory can be set through the environment variable `PIPIS_BIN`.
@@ -49,8 +51,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Everything.
 
-[Unreleased]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.2.0...HEAD
-[1.1.0]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.1.0...1.2.0
+[Unreleased]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.3.0...HEAD
+[1.3.0]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.2.0...v1.3.0
+[1.2.0]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.1.0...1.2.0
 [1.1.0]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.0.1...v1.1.0
 [1.0.1]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.0.0...v1.0.1
 [1.0.0]: https://gitlab.com/NicolasKAROLAK/pipis/compare/0c3cc746...v1.0.0
