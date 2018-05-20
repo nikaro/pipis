@@ -11,7 +11,7 @@ Actually it is a rewrite of [pipsi](https://github.com/mitsuhiko/pipsi) but with
 
 Pipis is a wrapper around venv and pip which installs scripts provided by python packages into separate venvs to shield them from your system and each other.
 
-It creates a venv in `~/.local/venvs/`, update pip, installs the package, and links the package's scripts to `~/.local/bin/`.
+It creates a venv in `~/.local/venvs/`, update pip, installs the package, and links the package's scripts to `~/.local/bin/`. These directory can be changed respectively through the environment variables `PIPIS_VENVS` and `PIPIS_BIN`.
 
 ## Why not pipsi?
 

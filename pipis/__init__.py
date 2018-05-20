@@ -99,8 +99,10 @@ def cli():
     Pipis is a wrapper around venv and pip which installs python packages into
     separate venvs to shield them from your system and each other.
 
-    It creates a venv in `~/.local/venvs/<package>`, update pip, installs the
-    package, and links the package's scripts to `~/.local/bin/`.
+    It creates a venv in `~/.local/venvs/<package>`, updates pip, installs the
+    package, and links the package's scripts to `~/.local/bin/`. These
+    directory can be changed respectively through the environment variables
+    `PIPIS_VENVS` and `PIPIS_BIN`.
     """
     pass
 
