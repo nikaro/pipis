@@ -2,6 +2,6 @@ version: '3'
 services:
   tests:
     build: .
-    command: poetry run python -m pytest
+    command: make run_tests
     volumes:
       - .:/app
