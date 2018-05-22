@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "pipis"
 version = "1.3.0"
-description = "Somewhere between pip and pipsi"
+description = "Wraps pip and venv to install scripts"
 license = "WTFPL"
 authors = ["Nicolas KAROLAK <nicolas@karolak.fr>"]
 readme = "README.md"
