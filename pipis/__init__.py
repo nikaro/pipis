@@ -228,7 +228,7 @@ def update(requirement, name):
         os.environ.get('PIPIS_BIN', DEFAULT_PIPIS_BIN))
     # check mutually esclusive args
     if requirement and name:
-        raise click.UsageError('too much arguments/options')
+        raise click.UsageError('too many arguments/options')
     # populate packages list with req file
     if requirement:
         try:
