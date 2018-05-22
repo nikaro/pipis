@@ -2,8 +2,7 @@
 
 | **tests** | [![pipeline status](https://gitlab.com/NicolasKAROLAK/pipis/badges/master/pipeline.svg)](https://gitlab.com/NicolasKAROLAK/pipis/commits/master) [![coverage report](https://gitlab.com/NicolasKAROLAK/pipis/badges/master/coverage.svg)](https://gitlab.com/NicolasKAROLAK/pipis/commits/master) |
 |-|-|
-| **package** | [![PyPI version](https://img.shields.io/pypi/v/pipis.svg)](https://pypi.org/project/pipis) [![Supported versions](https://img.shields.io/pypi/pyversions/pipis.svg)](https://pypi.org/project/pipis) [![PyPI - Status](https://img.shields.io/pypi/status/pipis.svg)](https://gitlab.com/NicolasKAROLAK/pipis)
- |
+| **package** | [![PyPI version](https://img.shields.io/pypi/v/pipis.svg)](https://pypi.org/project/pipis) [![Supported versions](https://img.shields.io/pypi/pyversions/pipis.svg)](https://pypi.org/project/pipis) [![PyPI - Status](https://img.shields.io/pypi/status/pipis.svg)](https://gitlab.com/NicolasKAROLAK/pipis) |
 
 ## Somewhere between pip and pipsi
 
