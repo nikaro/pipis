@@ -142,20 +142,13 @@ def test_install_requirements(tmpdir):
 def test_install_inexistant_requirements(tmpdir):
     set_env(tmpdir)
 
-    package = 'pipis'
     req = str(tmpdir.join('requirements.txt'))
-    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
-    script = os.path.join(venv, 'bin', package)
-    link = os.path.join(os.environ['PIPIS_BIN'], package)
 
     msg = 'Error: Could not open file'
 
     result = runner.invoke(pipis.install, ['-y', '-r', req])
 
     assert msg in result.output
-    assert not os.path.isdir(venv)
-    assert not os.path.isfile(script)
-    assert not os.path.islink(link)
     assert result.exit_code != 0
 
 
