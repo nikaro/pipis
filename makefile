@@ -8,7 +8,11 @@ lint:
 test:
 	poetry run python -m pytest
 
-run_tests: lint test
-
-run_tests_docker:
+docker:
 	docker-compose up
+
+build:
+	poetry build
+
+publish:
+	poetry publish

@@ -9,6 +9,7 @@ before_script:
 stages:
   - lint
   - test
+  - build
 
 lint:
   stage: lint
@@ -17,5 +18,9 @@ lint:
 test:
   stage: test
   script: make test
+
+build:
+  stage: build
+  script: make build
 
 ...

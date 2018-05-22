@@ -2,6 +2,6 @@ version: '3'
 services:
   tests:
     build: .
-    command: make run_tests
+    command: bash -c 'make lint; make test; make build'
     volumes:
       - .:/app
