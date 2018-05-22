@@ -6,7 +6,7 @@ lint:
 	poetry run pylint pipis/__init__.py
 
 test:
-	poetry run python -m pytest
+	poetry run python -m pytest --cov=pipis/
 
 docker:
 	docker-compose up
