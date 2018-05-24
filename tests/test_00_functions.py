@@ -45,3 +45,31 @@ def test_get_env_data(tmpdir):
     assert type(result) == type(tuple())
     assert venv_dir.startswith(str(tmpdir.dirpath()))
     assert venv_py.startswith(str(tmpdir.dirpath()))
+
+def test_get_dist(tmpdir):
+    set_env(tmpdir)
+
+    package = 'pipis'
+
+    runner.invoke(pipis.install, ['-y', package])
+    result = pipis._get_dist(package)
+
+    assert hasattr(result, 'location')
+    assert hasattr(result, 'project_name')
+    assert hasattr(result, 'version')
+    assert hasattr(result, 'has_metadata')
+    assert hasattr(result, 'get_metadata_lines')
+    assert hasattr(result, 'get_entry_map')
+
+
+def test_get_console_scripts(tmpdir):
+    set_env(tmpdir)
+
+    package = 'pipis'
+
+    runner.invoke(pipis.install, ['-y', package])
+    result = pipis._get_console_scripts(package)
+
+    assert isinstance(result, list)
+    assert os.path.isfile(result[0])
+    assert 'bin' in result[0]
