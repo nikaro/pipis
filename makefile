@@ -8,6 +8,9 @@ lint:
 test:
 	poetry run python -m pytest --cov=pipis/
 
+test_verbose:
+	poetry run python -m pytest -v --cov-report term-missing --cov=pipis/
+
 docker:
 	docker-compose up
 
