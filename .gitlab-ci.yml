@@ -22,5 +22,11 @@ test:
 build:
   stage: build
   script: make build
+  artifacts:
+    paths:
+      - dist/*.whl
+      - dist/*.tar.gz
+  only:
+    - tags
 
 ...
