@@ -1,9 +1,11 @@
 import os
+import re
 import sys
 sys.path.append('..')
 
 import click
 from click.testing import CliRunner
+import pytest
 
 from helpers import set_env
 import pipis
@@ -75,3 +77,34 @@ def test_get_console_scripts(tmpdir):
     assert isinstance(result, list)
     assert os.path.isfile(result[0])
     assert 'bin' in result[0]
+
+
+def test_version(tmpdir):
+    set_env(tmpdir)
+
+    package = 'pipis'
+
+    runner.invoke(pipis.install, ['-y', package])
+    result = pipis._get_version(package)
+
+    assert re.match(r'^\d+\.\d+\.\d+', result)
+
+
+def test_abort_if_false_none():
+    ctx = click.Context(click.Command('hello'))
+
+    with pytest.raises(click.exceptions.Abort):
+        pipis._abort_if_false(ctx, None, None)
+
+
+def test_abort_if_false():
+    ctx = click.Context(click.Command('hello'))
+    result = pipis._abort_if_false(ctx, None, 'hello')
+
+    assert result is None
+
+
+def test_show_package():
+    result = pipis._show_package('hello')
+
+    assert result == 'hello'

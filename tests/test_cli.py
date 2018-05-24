@@ -10,7 +10,7 @@ import pipis
 runner = CliRunner()
 
 
-def test_cli(tmpdir):
+def test_cli_help(tmpdir):
     set_env(tmpdir)
 
     result = runner.invoke(pipis.cli)
