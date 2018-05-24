@@ -1,6 +1,6 @@
-.PHONY: lint test run_tests run_docker build publish
+.PHONY: lint test test_verbose docker build publish clean
 
-all:
+all: lint test_verbose build
 
 lint:
 	poetry run pylint pipis/__init__.py
@@ -19,3 +19,8 @@ build:
 
 publish:
 	poetry publish
+
+clean:
+	@rm -rf .pytest_cache/ dist/
+	@find . -type d -name __pycache__ -prune -exec rm -rf {} +
+	@find . -type f -name *.pyc -exec rm -fv {} +
