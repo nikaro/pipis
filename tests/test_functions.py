@@ -12,6 +12,8 @@ runner = CliRunner()
 
 
 def test_set_pipis_vars_default():
+    del os.environ['PIPIS_VENVS']
+    del os.environ['PIPIS_BIN']
     vars = tuple(map(os.path.expanduser, (pipis.DEFAULT_PIPIS_VENVS,
                                           pipis.DEFAULT_PIPIS_BIN)))
 
