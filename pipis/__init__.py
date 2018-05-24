@@ -285,7 +285,7 @@ def uninstall(requirement, name):
         raise click.UsageError('missing arguments/options')
     # check mutually esclusive args
     if requirement and name:
-        raise click.UsageError('too much arguments/options')
+        raise click.UsageError('too many arguments/options')
     # populate packages list with req file
     if requirement:
         try:
