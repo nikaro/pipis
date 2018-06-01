@@ -3,7 +3,7 @@
 all: lint test_verbose build
 
 lint:
-	poetry run pylint pipis/__init__.py
+	poetry run python -m pylint pipis/__init__.py
 
 test:
 	poetry run python -m pytest --cov=pipis/
