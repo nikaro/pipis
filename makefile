@@ -17,7 +17,7 @@ docker:
 build:
 	poetry build
 
-publish:
+publish: build
 	poetry publish
 
 clean:
