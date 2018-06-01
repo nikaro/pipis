@@ -10,7 +10,7 @@ platform = "*"
 [package.dependencies]
 "backports.functools-lru-cache" = "*"
 singledispatch = "*"
-enum34 = ">= 1.1.3.0"
+enum34 = ">=1.1.3"
 wrapt = "*"
 six = "*"
 lazy-object-proxy = "*"
@@ -42,7 +42,7 @@ python-versions = "*"
 platform = "*"
 
 [package.dependencies]
-pycodestyle = ">= 2.3.0.0"
+pycodestyle = ">=2.3"
 [[package]]
 name = "click"
 version = "6.7"
@@ -111,7 +111,7 @@ python-versions = "*"
 platform = "*"
 
 [package.dependencies]
-six = "< 2.0.0.0, >= 1.0.0.0"
+six = ">=1.0.0,<2.0.0"
 [[package]]
 name = "pluggy"
 version = "0.6.0"
@@ -154,9 +154,9 @@ colorama = "*"
 configparser = "*"
 singledispatch = "*"
 mccabe = "*"
-isort = ">= 4.2.5.0"
+isort = ">=4.2.5"
 six = "*"
-astroid = "< 2.0.0.0, >= 1.6.0.0"
+astroid = ">=1.6,<2.0"
 [[package]]
 name = "pytest"
 version = "3.6.0"
@@ -169,13 +169,13 @@ platform = "unix"
 [package.dependencies]
 colorama = "*"
 funcsigs = "*"
-pluggy = "< 0.7.0.0, >= 0.5.0.0"
-atomicwrites = ">= 1.0.0.0"
-more-itertools = ">= 4.0.0.0"
-attrs = ">= 17.4.0.0"
+pluggy = ">=0.5,<0.7"
+atomicwrites = ">=1.0"
+more-itertools = ">=4.0.0"
+attrs = ">=17.4.0"
 setuptools = "*"
-six = ">= 1.10.0.0"
-py = ">= 1.5.0.0"
+six = ">=1.10.0"
+py = ">=1.5.0"
 [[package]]
 name = "pytest-cov"
 version = "2.5.1"
@@ -186,8 +186,8 @@ python-versions = "*"
 platform = "*"
 
 [package.dependencies]
-coverage = ">= 3.7.1.0"
-pytest = ">= 2.6.0.0"
+coverage = ">=3.7.1"
+pytest = ">=2.6.0"
 [[package]]
 name = "six"
 version = "1.11.0"
@@ -218,7 +218,7 @@ platform = "*"
 [metadata]
 python-versions = "^3.4"
 platform = "*"
-content-hash = "6dd094a65d8e51a929a9aa135ae499c372f2151f8b717bd5ce7613554b9262c9"
+content-hash = "391e09f5dad900fca9f481e124a50fbe6d59a8de4f44b3788f898b07b55aae97"
 
 [metadata.hashes]
 astroid = [ "032f6e09161e96f417ea7fad46d3fac7a9019c775f202182c22df0e4f714cb1c", "dea42ae6e0b789b543f728ddae7ddb6740ba33a49fb52c4a4d9cb7bb4aa6ec09",]
