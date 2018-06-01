@@ -149,6 +149,8 @@ def freeze():
               help='Confirm the action without prompting.')
 @click.option('-r', '--requirement',
               help='Install from the given requirements file.')
+@click.option('-s', '--system-site-packages', is_flag=True,
+              help='Give the virtual environment access to the system site-packages dir.')
 @click.argument('name', nargs=-1, type=click.STRING)
 def install(requirement, name):
     """
@@ -179,7 +181,7 @@ def install(requirement, name):
             cmd = [venv_py, '-m', 'pip', 'install', '--quiet']
             # create venv if not exists
             if not os.path.isdir(venv_dir):
-                create(venv_dir, symlinks=True, with_pip=True)
+                create(venv_dir, symlinks=True, with_pip=True, system_site_packages=system_site_packages)
                 # upgrade pip in venv
                 cmd.extend(['--upgrade', 'pip'])
                 check_call(cmd)
