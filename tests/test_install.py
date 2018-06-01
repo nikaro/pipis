@@ -41,6 +41,23 @@ def test_install(tmpdir):
     assert result.exit_code == 0
 
 
+def test_install_system_site_packages(tmpdir):
+    set_env(tmpdir)
+
+    package = 'pipis'
+    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
+    script = os.path.join(venv, 'bin', package)
+    link = os.path.join(os.environ['PIPIS_BIN'], package)
+
+    result = runner.invoke(pipis.install, ['-y', '-s', package])
+
+    assert 'Installing' in result.output
+    assert os.path.isdir(venv)
+    assert os.path.isfile(script)
+    assert os.path.islink(link)
+    assert result.exit_code == 0
+
+
 def test_install_inexistant_package(tmpdir):
     set_env(tmpdir)
 
