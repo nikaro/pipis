@@ -160,7 +160,7 @@ def freeze():
     help="Give the virtual environment access to the system site-packages dir.",
 )
 @click.argument("name", nargs=-1, type=click.STRING)
-def install(requirement, name):
+def install(requirement, system_site_packages, name):
     """
     Install packages, where NAME is the package name.
     You can specify multiple names.
