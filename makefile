@@ -17,6 +17,10 @@ docker:
 build:
 	poetry build
 
+install: build
+	python -m venv --symlinks --upgrade ~/.local/venvs/pipis
+	~/.local/venvs/pipis/bin/pip install -I dist/pipis-*.whl
+
 publish: build
 	poetry publish
 
