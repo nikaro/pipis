@@ -44,8 +44,6 @@ def _get_dist(package):
     importlib.reload(pkg_resources)
     # get informations about package
     dist = pkg_resources.get_distribution(package)
-    # remove package venv from current path
-    del sys.path[-1]
 
     return dist
 
