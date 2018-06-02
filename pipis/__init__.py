@@ -34,16 +34,24 @@ def _get_venv_data(package):
 
 
 def _get_dist(package):
-    _, venv_py = _get_venv_data(package)
+    venv_dir, venv_py = _get_venv_data(package)
     # get the module path from its venv and append it to the current path
-    cmd_last_path = "import sys; print(sys.path[-1])"
-    venv_path = check_output([venv_py, "-c", cmd_last_path])
+    cmd_path = [
+        "import sys;",
+        "p = list(filter(lambda x: x.startswith('{}'), sys.path));".format(venv_dir),
+        "print(p[0]);"
+    ]
+    cmd_path = " ".join(cmd_path)
+    venv_path = check_output([venv_py, "-c", cmd_path])
     venv_path = venv_path.decode("utf-8").strip()
     sys.path.append(venv_path)
     # reload pkg_resources module to take into account new path
     importlib.reload(pkg_resources)
     # get informations about package
     dist = pkg_resources.get_distribution(package)
+    # remove package venv from current path
+    index = sys.path.index(venv_path)
+    del sys.path[index]
 
     return dist
 
