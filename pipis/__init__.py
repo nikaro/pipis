@@ -25,6 +25,14 @@ def _set_pipis_vars():
     return pipis_venvs, pipis_bin
 
 
+def _get_package_data(package):
+    req = pkg_resources.Requirement(package)
+    package_name = req.project_name
+    package_spec = str(req.specifier)
+
+    return package_name, package_spec
+
+
 def _get_venv_data(package):
     pipis_venvs, _ = _set_pipis_vars()
     venv_dir = os.path.join(pipis_venvs, package)
@@ -39,7 +47,7 @@ def _get_dist(package):
     cmd_path = [
         "import sys;",
         "p = list(filter(lambda x: x.startswith('{}'), sys.path));".format(venv_dir),
-        "print(p[0]);"
+        "print(p[0]);",
     ]
     cmd_path = " ".join(cmd_path)
     venv_path = check_output([venv_py, "-c", cmd_path])
@@ -192,6 +200,7 @@ def install(requirement, system_site_packages, name):
         name, label="Installing", item_show_func=_show_package
     ) as packages:
         for package in packages:
+            package, version = _get_package_data(package)
             venv_dir, venv_py = _get_venv_data(package)
             cmd = [venv_py, "-m", "pip", "install", "--quiet"]
             # create venv if not exists
@@ -206,7 +215,7 @@ def install(requirement, system_site_packages, name):
                 cmd.extend(["--upgrade", "pip"])
                 check_call(cmd)
                 # install package in venv
-                cmd.append(package)
+                cmd.append(package + version)
                 try:
                     check_call(cmd)
                 except CalledProcessError:
@@ -272,6 +281,7 @@ def update(requirement, name):
         name, label="Updating", item_show_func=_show_package
     ) as packages:
         for package in packages:
+            package, version = _get_package_data(package)
             venv_dir, venv_py = _get_venv_data(package)
             if not os.path.isdir(venv_dir):
                 message = "{} is not installed".format(package)
@@ -281,7 +291,7 @@ def update(requirement, name):
             cmd.extend(["--upgrade", "pip"])
             check_call(cmd)
             # install package in venv
-            cmd.extend(["--upgrade", package])
+            cmd.extend(["--upgrade", package + version])
             check_call(cmd)
             # update scripts symlink
             scripts = _get_console_scripts(package)
@@ -329,6 +339,7 @@ def uninstall(requirement, name):
         name, label="Removing", item_show_func=_show_package
     ) as packages:
         for package in packages:
+            package, version = _get_package_data(package)
             venv_dir = os.path.join(pipis_venvs, package)
             if os.path.isdir(venv_dir):
                 # remove scripts symlink

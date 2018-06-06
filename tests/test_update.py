@@ -25,6 +25,23 @@ def test_update(tmpdir):
     assert result.exit_code == 0
 
 
+def test_update_version(tmpdir):
+    set_env(tmpdir)
+
+    package = 'pipis'
+    version = '==1.0.0'
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+
+    runner.invoke(pipis.install, ['-y', package + version])
+    result = runner.invoke(pipis.update, ['-y', package + version])
+
+    assert 'Updating' in result.output
+    assert os.path.exists(
+        os.path.join(venv, "lib/python3.6/site-packages/pipis-1.0.0.dist-info")
+    )
+    assert result.exit_code == 0
+
+
 def test_update_all(tmpdir):
     set_env(tmpdir)
 

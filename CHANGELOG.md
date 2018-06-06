@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Install option `-s` or `--system-site-packages` to give access to system site-packages to venv.
+- Allow to specify package version (ex: `ansible==2.4.0`).
 
 ## [1.3.1]
 ### Fixed

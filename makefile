@@ -1,6 +1,9 @@
-.PHONY: lint test test_verbose docker build publish clean
+.PHONY: format lint test test_verbose docker build publish clean
 
 all: lint test_verbose build
+
+format:
+	poetry run python -m black pipis/__init__.py
 
 lint:
 	poetry run python -m pylint pipis/__init__.py
