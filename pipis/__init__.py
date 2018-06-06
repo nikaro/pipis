@@ -128,8 +128,8 @@ def cli():
     pass
 
 
-@cli.command(context_settings=CONTEXT_SETTINGS)
-def version():
+@cli.command("version", context_settings=CONTEXT_SETTINGS)
+def show_version():
     """Show version and exit."""
     package_version = _get_version(__name__)
     click.echo(package_version)
@@ -339,7 +339,7 @@ def uninstall(requirement, name):
         name, label="Removing", item_show_func=_show_package
     ) as packages:
         for package in packages:
-            package, version = _get_package_data(package)
+            package, _ = _get_package_data(package)
             venv_dir = os.path.join(pipis_venvs, package)
             if os.path.isdir(venv_dir):
                 # remove scripts symlink

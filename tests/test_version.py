@@ -16,7 +16,7 @@ def test_version(tmpdir):
 
     runner.invoke(pipis.install, ['-y', 'pipis'])
 
-    result = runner.invoke(pipis.version)
+    result = runner.invoke(pipis.show_version)
 
     assert re.match(r'^\d+\.\d+\.\d+', result.output)
     assert result.exit_code == 0
@@ -28,7 +28,7 @@ def test_version_bad_arg(tmpdir):
     msg = 'Error: Got unexpected extra argument (bad_arg)'
 
     runner.invoke(pipis.install, ['-y', 'pipis'])
-    result = runner.invoke(pipis.version, ['bad_arg'])
+    result = runner.invoke(pipis.show_version, ['bad_arg'])
 
     assert msg in result.output
     assert result.exit_code == 2
