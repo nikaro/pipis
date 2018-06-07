@@ -1,7 +1,8 @@
 from pathlib import Path
 import os
 import sys
-sys.path.append('..')
+
+sys.path.append("..")
 
 import click
 import pipis
@@ -16,9 +17,9 @@ runner = CliRunner()
 def test_install_missing_arg(tmpdir):
     set_env(tmpdir)
 
-    msg = 'Error: missing arguments/options'
+    msg = "Error: missing arguments/options"
 
-    result = runner.invoke(pipis.install, ['-y'])
+    result = runner.invoke(pipis.install, ["-y"])
 
     assert msg in result.output
     assert result.exit_code == 2
@@ -27,14 +28,14 @@ def test_install_missing_arg(tmpdir):
 def test_install(tmpdir):
     set_env(tmpdir)
 
-    package = 'pipis'
-    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
-    script = os.path.join(venv, 'bin', package)
-    link = os.path.join(os.environ['PIPIS_BIN'], package)
+    package = "pipis"
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+    script = os.path.join(venv, "bin", package)
+    link = os.path.join(os.environ["PIPIS_BIN"], package)
 
-    result = runner.invoke(pipis.install, ['-y', package])
+    result = runner.invoke(pipis.install, ["-y", package])
 
-    assert 'Installing' in result.output
+    assert "Installing" in result.output
     assert os.path.isdir(venv)
     assert os.path.isfile(script)
     assert os.path.islink(link)
@@ -44,20 +45,22 @@ def test_install(tmpdir):
 def test_install_version(tmpdir):
     set_env(tmpdir)
 
-    package = 'pipis'
-    version = '1.0.0'
-    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
-    script = os.path.join(venv, 'bin', package)
-    link = os.path.join(os.environ['PIPIS_BIN'], package)
+    package = "pipis"
+    version = "1.0.0"
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+    script = os.path.join(venv, "bin", package)
+    link = os.path.join(os.environ["PIPIS_BIN"], package)
 
-    result = runner.invoke(pipis.install, ['-y', package + "==" + version])
+    result = runner.invoke(pipis.install, ["-y", package + "==" + version])
 
-    assert 'Installing' in result.output
+    assert "Installing" in result.output
     assert os.path.isdir(venv)
     assert os.path.isfile(script)
     assert os.path.islink(link)
     assert os.path.exists(
-        os.path.join(venv, "lib", "python3.6", "site-packages", "pipis-" + version + ".dist-info")
+        os.path.join(
+            venv, "lib", "python3.6", "site-packages", "pipis-" + version + ".dist-info"
+        )
     )
     assert result.exit_code == 0
 
@@ -65,18 +68,18 @@ def test_install_version(tmpdir):
 def test_install_with_dependency(tmpdir):
     set_env(tmpdir)
 
-    package = 'pipis'
-    dependency = 'pylint'
-    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
-    dep_req = os.path.join(venv, 'requirements.txt')
-    dep_dir = os.path.join(venv, 'lib', 'python3.6', 'site-packages', dependency)
+    package = "pipis"
+    dependency = "pylint"
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+    dep_req = os.path.join(venv, "requirements.txt")
+    dep_dir = os.path.join(venv, "lib", "python3.6", "site-packages", dependency)
 
-    result = runner.invoke(pipis.install, ['-y', package, '-d', dependency])
+    result = runner.invoke(pipis.install, ["-y", package, "-d", dependency])
 
     with open(dep_req) as req:
         dep_req_content = req.read().splitlines()
 
-    assert 'Installing' in result.output
+    assert "Installing" in result.output
     assert os.path.isdir(venv)
     assert os.path.isfile(dep_req)
     assert dependency in dep_req_content
@@ -87,19 +90,19 @@ def test_install_with_dependency(tmpdir):
 def test_install_add_dependency(tmpdir):
     set_env(tmpdir)
 
-    package = 'pipis'
-    dependency = 'pylint'
-    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
-    dep_req = os.path.join(venv, 'requirements.txt')
-    dep_dir = os.path.join(venv, 'lib', 'python3.6', 'site-packages', dependency)
+    package = "pipis"
+    dependency = "pylint"
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+    dep_req = os.path.join(venv, "requirements.txt")
+    dep_dir = os.path.join(venv, "lib", "python3.6", "site-packages", dependency)
 
-    runner.invoke(pipis.install, ['-y', package])
-    result = runner.invoke(pipis.install, ['-y', package, '-d', dependency])
+    runner.invoke(pipis.install, ["-y", package])
+    result = runner.invoke(pipis.install, ["-y", package, "-d", dependency])
 
     with open(dep_req) as req:
         dep_req_content = req.read().splitlines()
 
-    assert 'Installing' in result.output
+    assert "Installing" in result.output
     assert os.path.isfile(dep_req)
     assert dependency in dep_req_content
     assert os.path.isdir(dep_dir)
@@ -109,10 +112,10 @@ def test_install_add_dependency(tmpdir):
 def test_install_dependency_many_packages(tmpdir):
     set_env(tmpdir)
 
-    packages = ['pipis', 'pipsi']
-    dependency = 'pylint'
+    packages = ["pipis", "pipsi"]
+    dependency = "pylint"
 
-    result = runner.invoke(pipis.install, ['-y', " ".join(packages), '-d', dependency])
+    result = runner.invoke(pipis.install, ["-y", " ".join(packages), "-d", dependency])
 
     assert result.exit_code != 0
 
@@ -120,14 +123,14 @@ def test_install_dependency_many_packages(tmpdir):
 def test_install_system_site_packages(tmpdir):
     set_env(tmpdir)
 
-    package = 'pipis'
-    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
-    script = os.path.join(venv, 'bin', package)
-    link = os.path.join(os.environ['PIPIS_BIN'], package)
+    package = "pipis"
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+    script = os.path.join(venv, "bin", package)
+    link = os.path.join(os.environ["PIPIS_BIN"], package)
 
-    result = runner.invoke(pipis.install, ['-y', '-s', package])
+    result = runner.invoke(pipis.install, ["-y", "-s", package])
 
-    assert 'Installing' in result.output
+    assert "Installing" in result.output
     assert os.path.isdir(venv)
     assert os.path.isfile(script)
     assert os.path.islink(link)
@@ -137,14 +140,14 @@ def test_install_system_site_packages(tmpdir):
 def test_install_inexistant_package(tmpdir):
     set_env(tmpdir)
 
-    package = 'rdnieuribiubsiesgppxna'
-    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
-    script = os.path.join(venv, 'bin', package)
-    link = os.path.join(os.environ['PIPIS_BIN'], package)
+    package = "rdnieuribiubsiesgppxna"
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+    script = os.path.join(venv, "bin", package)
+    link = os.path.join(os.environ["PIPIS_BIN"], package)
 
-    msg = 'Error: Cannot install {}'.format(package)
+    msg = "Error: Cannot install {}".format(package)
 
-    result = runner.invoke(pipis.install, ['-y', package])
+    result = runner.invoke(pipis.install, ["-y", package])
 
     assert msg in result.output
     assert not os.path.isdir(venv)
@@ -156,14 +159,14 @@ def test_install_inexistant_package(tmpdir):
 def test_install_library(tmpdir):
     set_env(tmpdir)
 
-    package = 'art'
-    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
-    script = os.path.join(venv, 'bin', package)
-    link = os.path.join(os.environ['PIPIS_BIN'], package)
+    package = "art"
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+    script = os.path.join(venv, "bin", package)
+    link = os.path.join(os.environ["PIPIS_BIN"], package)
 
-    msg = 'Error: library installation is not supported by pipis'
+    msg = "Error: library installation is not supported by pipis"
 
-    result = runner.invoke(pipis.install, ['-y', package])
+    result = runner.invoke(pipis.install, ["-y", package])
 
     assert msg in result.output
     assert not os.path.isdir(venv)
@@ -175,15 +178,15 @@ def test_install_library(tmpdir):
 def test_install_already_installed_package(tmpdir):
     set_env(tmpdir)
 
-    package = 'pipis'
-    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
-    script = os.path.join(venv, 'bin', package)
-    link = os.path.join(os.environ['PIPIS_BIN'], package)
+    package = "pipis"
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+    script = os.path.join(venv, "bin", package)
+    link = os.path.join(os.environ["PIPIS_BIN"], package)
 
-    msg = 'is already installed, skip'
+    msg = "is already installed, skip"
 
-    runner.invoke(pipis.install, ['-y', package])
-    result = runner.invoke(pipis.install, ['-y', package])
+    runner.invoke(pipis.install, ["-y", package])
+    result = runner.invoke(pipis.install, ["-y", package])
 
     assert msg in result.output
     assert os.path.isdir(venv)
@@ -195,15 +198,15 @@ def test_install_already_installed_package(tmpdir):
 def test_install_already_exists_symlink(tmpdir):
     set_env(tmpdir)
 
-    package = 'pipis'
-    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
-    script = os.path.join(venv, 'bin', package)
-    link = os.path.join(os.environ['PIPIS_BIN'], package)
+    package = "pipis"
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+    script = os.path.join(venv, "bin", package)
+    link = os.path.join(os.environ["PIPIS_BIN"], package)
 
-    msg = '{} already exists'.format(link)
+    msg = "{} already exists".format(link)
 
     Path(link).touch()
-    result = runner.invoke(pipis.install, ['-y', package])
+    result = runner.invoke(pipis.install, ["-y", package])
 
     assert msg in result.output
     assert not os.path.isdir(venv)
@@ -215,17 +218,17 @@ def test_install_already_exists_symlink(tmpdir):
 def test_install_requirements(tmpdir):
     set_env(tmpdir)
 
-    package = 'pipis'
-    req = tmpdir.join('requirements.txt')
-    with open(req, 'w') as f:
+    package = "pipis"
+    req = tmpdir.join("requirements.txt")
+    with open(req, "w") as f:
         f.write(package)
-    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
-    script = os.path.join(venv, 'bin', package)
-    link = os.path.join(os.environ['PIPIS_BIN'], package)
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+    script = os.path.join(venv, "bin", package)
+    link = os.path.join(os.environ["PIPIS_BIN"], package)
 
-    result = runner.invoke(pipis.install, ['-y', '-r', req])
+    result = runner.invoke(pipis.install, ["-y", "-r", req])
 
-    assert 'Installing' in result.output
+    assert "Installing" in result.output
     assert os.path.isdir(venv)
     assert os.path.isfile(script)
     assert os.path.islink(link)
@@ -235,11 +238,11 @@ def test_install_requirements(tmpdir):
 def test_install_inexistant_requirements(tmpdir):
     set_env(tmpdir)
 
-    req = str(tmpdir.join('requirements.txt'))
+    req = str(tmpdir.join("requirements.txt"))
 
-    msg = 'Error: Could not open file'
+    msg = "Error: Could not open file"
 
-    result = runner.invoke(pipis.install, ['-y', '-r', req])
+    result = runner.invoke(pipis.install, ["-y", "-r", req])
 
     assert msg in result.output
     assert result.exit_code != 0
@@ -248,17 +251,17 @@ def test_install_inexistant_requirements(tmpdir):
 def test_install_too_many_arg(tmpdir):
     set_env(tmpdir)
 
-    package = 'pipis'
-    req = tmpdir.join('requirements.txt')
-    with open(req, 'w') as f:
+    package = "pipis"
+    req = tmpdir.join("requirements.txt")
+    with open(req, "w") as f:
         f.write(package)
-    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
-    script = os.path.join(venv, 'bin', package)
-    link = os.path.join(os.environ['PIPIS_BIN'], package)
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+    script = os.path.join(venv, "bin", package)
+    link = os.path.join(os.environ["PIPIS_BIN"], package)
 
-    msg = 'Error: too many arguments/options'
+    msg = "Error: too many arguments/options"
 
-    result = runner.invoke(pipis.install, ['-y', package, '-r', req])
+    result = runner.invoke(pipis.install, ["-y", package, "-r", req])
 
     assert msg in result.output
     assert not os.path.isdir(venv)

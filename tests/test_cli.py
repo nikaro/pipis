@@ -1,5 +1,6 @@
 import sys
-sys.path.append('..')
+
+sys.path.append("..")
 
 import click
 from click.testing import CliRunner
@@ -15,7 +16,7 @@ def test_cli_help(tmpdir):
 
     result = runner.invoke(pipis.cli)
 
-    assert result.output.startswith('Usage: ')
+    assert result.output.startswith("Usage: ")
     assert result.exit_code == 0
 
 
@@ -24,7 +25,7 @@ def test_cli_bad_arg(tmpdir):
 
     msg = 'Error: No such command "bad_arg".'
 
-    result = runner.invoke(pipis.cli, ['bad_arg'])
+    result = runner.invoke(pipis.cli, ["bad_arg"])
 
     assert msg in result.output
     assert result.exit_code == 2
