@@ -42,6 +42,19 @@ def test_update_version(tmpdir):
     assert result.exit_code == 0
 
 
+def test_update_with_dependency(tmpdir):
+    set_env(tmpdir)
+
+    package = 'pipis'
+    dependency = 'pylint'
+
+    runner.invoke(pipis.install, ['-y', package, '-d', dependency])
+    result = runner.invoke(pipis.update, ['-y', package])
+
+    assert 'Updating' in result.output
+    assert result.exit_code == 0
+
+
 def test_update_all(tmpdir):
     set_env(tmpdir)
 

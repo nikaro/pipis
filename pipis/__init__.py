@@ -245,6 +245,7 @@ def install(requirement, dependency, system_site_packages, name):
                 cmd.append(package + version)
                 try:
                     check_call(cmd)
+                    # install dependency on venv
                     if dependency:
                         dependencies = _set_requirement(package, dependency)
                         check_call(cmd + ["--requirement", dependencies])
@@ -321,6 +322,10 @@ def update(requirement, name):
             check_call(cmd + ["--upgrade", "pip"])
             # install package in venv
             check_call(cmd + ["--upgrade", package + version])
+            # update dependency on venv
+            req = os.path.join(venv_dir, 'requirements.txt')
+            if os.path.exists(req):
+                check_call(cmd + ["--upgrade", "-r", req])
             # update scripts symlink
             scripts = _get_console_scripts(package)
             for script in scripts:
