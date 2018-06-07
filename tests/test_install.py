@@ -57,9 +57,64 @@ def test_install_version(tmpdir):
     assert os.path.isfile(script)
     assert os.path.islink(link)
     assert os.path.exists(
-        os.path.join(venv, "lib/python3.6/site-packages/pipis-" + version + ".dist-info")
+        os.path.join(venv, "lib", "python3.6", "site-packages", "pipis-" + version + ".dist-info")
     )
     assert result.exit_code == 0
+
+
+def test_install_with_dependency(tmpdir):
+    set_env(tmpdir)
+
+    package = 'pipis'
+    dependency = 'pylint'
+    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
+    dep_req = os.path.join(venv, 'requirements.txt')
+    dep_dir = os.path.join(venv, 'lib', 'python3.6', 'site-packages', dependency)
+
+    result = runner.invoke(pipis.install, ['-y', package, '-d', dependency])
+
+    with open(dep_req) as req:
+        dep_req_content = req.read().splitlines()
+
+    assert 'Installing' in result.output
+    assert os.path.isdir(venv)
+    assert os.path.isfile(dep_req)
+    assert dependency in dep_req_content
+    assert os.path.isdir(dep_dir)
+    assert result.exit_code == 0
+
+
+def test_install_add_dependency(tmpdir):
+    set_env(tmpdir)
+
+    package = 'pipis'
+    dependency = 'pylint'
+    venv = os.path.join(os.environ['PIPIS_VENVS'], package)
+    dep_req = os.path.join(venv, 'requirements.txt')
+    dep_dir = os.path.join(venv, 'lib', 'python3.6', 'site-packages', dependency)
+
+    runner.invoke(pipis.install, ['-y', package])
+    result = runner.invoke(pipis.install, ['-y', package, '-d', dependency])
+
+    with open(dep_req) as req:
+        dep_req_content = req.read().splitlines()
+
+    assert 'Installing' in result.output
+    assert os.path.isfile(dep_req)
+    assert dependency in dep_req_content
+    assert os.path.isdir(dep_dir)
+    assert result.exit_code == 0
+
+
+def test_install_dependency_many_packages(tmpdir):
+    set_env(tmpdir)
+
+    packages = ['pipis', 'pipsi']
+    dependency = 'pylint'
+
+    result = runner.invoke(pipis.install, ['-y', " ".join(packages), '-d', dependency])
+
+    assert result.exit_code != 0
 
 
 def test_install_system_site_packages(tmpdir):

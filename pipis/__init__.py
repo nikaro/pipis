@@ -111,6 +111,32 @@ def _show_package(package):
     return package
 
 
+def _get_requirement(requirement):
+    try:
+        with open(requirement, "r") as req:
+            return list(map(str.strip, req.readlines()))
+    except IOError:
+        raise click.FileError(requirement)
+
+
+def _set_requirement(package, dependency):
+    venv_dir, _ = _get_venv_data(package)
+    requirement = os.path.join(venv_dir, "requirements.txt")
+    req_content = set()
+
+    if os.path.exists(requirement):
+        with open(requirement, "r") as req:
+            req_content = set(req.read().splitlines())
+
+    if dependency not in req_content:
+        req_content.add(dependency)
+        with open(requirement, "w") as req:
+            req.write("\n".join(sorted(req_content)))
+            req.write("\n")
+
+    return requirement
+
+
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 
@@ -168,13 +194,16 @@ def freeze():
 )
 @click.option("-r", "--requirement", help="Install from the given requirements file.")
 @click.option(
+    "-d", "--dependency", help="Add the specified package as dependency in the venv."
+)
+@click.option(
     "-s",
     "--system-site-packages",
     is_flag=True,
     help="Give the virtual environment access to the system site-packages dir.",
 )
 @click.argument("name", nargs=-1, type=click.STRING)
-def install(requirement, system_site_packages, name):
+def install(requirement, dependency, system_site_packages, name):
     """
     Install packages, where NAME is the package name.
     You can specify multiple names.
@@ -190,11 +219,10 @@ def install(requirement, system_site_packages, name):
         raise click.UsageError("too many arguments/options")
     # populate packages list with req file
     if requirement:
-        try:
-            with open(requirement, "r") as req:
-                name = map(str.strip, req.readlines())
-        except IOError:
-            raise click.FileError(requirement)
+        name = _get_requirement(requirement)
+    # do not add dependency to multiple packages
+    if len(name) > 1 and dependency:
+        raise click.UsageError("cannot add dependecy to multiple packages")
     # process packages
     with click.progressbar(
         name, label="Installing", item_show_func=_show_package
@@ -212,12 +240,14 @@ def install(requirement, system_site_packages, name):
                     system_site_packages=system_site_packages,
                 )
                 # upgrade pip in venv
-                cmd.extend(["--upgrade", "pip"])
-                check_call(cmd)
+                check_call(cmd + ["--upgrade", "pip"])
                 # install package in venv
                 cmd.append(package + version)
                 try:
                     check_call(cmd)
+                    if dependency:
+                        dependencies = _set_requirement(package, dependency)
+                        check_call(cmd + ["--requirement", dependencies])
                 except CalledProcessError:
                     rmtree(venv_dir)
                     message = "Cannot install {}".format(package)
@@ -237,6 +267,10 @@ def install(requirement, system_site_packages, name):
                         rmtree(venv_dir)
                         message = "{} already exists".format(link)
                         raise click.ClickException(message)
+            # install dependency on venv
+            elif dependency:
+                dependencies = _set_requirement(package, dependency)
+                check_call(cmd + ["--requirement", dependencies])
             else:
                 click.secho(" is already installed, skip", fg="green")
 
@@ -269,11 +303,7 @@ def update(requirement, name):
         raise click.UsageError("too many arguments/options")
     # populate packages list with req file
     if requirement:
-        try:
-            with open(requirement, "r") as req:
-                name = map(str.strip, req.readlines())
-        except IOError:
-            raise click.FileError(requirement)
+        name = _get_requirement(requirement)
     # populate packages list with all currently installed
     if not name:
         name = os.listdir(pipis_venvs)
@@ -288,11 +318,9 @@ def update(requirement, name):
                 raise click.ClickException(message)
             cmd = [venv_py, "-m", "pip", "install", "--quiet"]
             # upgrade pip in venv
-            cmd.extend(["--upgrade", "pip"])
-            check_call(cmd)
+            check_call(cmd + ["--upgrade", "pip"])
             # install package in venv
-            cmd.extend(["--upgrade", package + version])
-            check_call(cmd)
+            check_call(cmd + ["--upgrade", package + version])
             # update scripts symlink
             scripts = _get_console_scripts(package)
             for script in scripts:
@@ -330,11 +358,7 @@ def uninstall(requirement, name):
         raise click.UsageError("too many arguments/options")
     # populate packages list with req file
     if requirement:
-        try:
-            with open(requirement, "r") as req:
-                name = map(str.strip, req.readlines())
-        except IOError:
-            raise click.FileError(requirement)
+        name = _get_requirement(requirement)
     with click.progressbar(
         name, label="Removing", item_show_func=_show_package
     ) as packages:
