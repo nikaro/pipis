@@ -45,19 +45,19 @@ def test_install_version(tmpdir):
     set_env(tmpdir)
 
     package = 'pipis'
-    version = '==1.0.0'
+    version = '1.0.0'
     venv = os.path.join(os.environ['PIPIS_VENVS'], package)
     script = os.path.join(venv, 'bin', package)
     link = os.path.join(os.environ['PIPIS_BIN'], package)
 
-    result = runner.invoke(pipis.install, ['-y', package + version])
+    result = runner.invoke(pipis.install, ['-y', package + "==" + version])
 
     assert 'Installing' in result.output
     assert os.path.isdir(venv)
     assert os.path.isfile(script)
     assert os.path.islink(link)
     assert os.path.exists(
-        os.path.join(venv, "lib/python3.6/site-packages/pipis-1.0.0.dist-info")
+        os.path.join(venv, "lib/python3.6/site-packages/pipis-" + version + ".dist-info")
     )
     assert result.exit_code == 0
 
