@@ -323,7 +323,7 @@ def update(requirement, name):
             # install package in venv
             check_call(cmd + ["--upgrade", package + version])
             # update dependency on venv
-            req = os.path.join(venv_dir, 'requirements.txt')
+            req = os.path.join(venv_dir, "requirements.txt")
             if os.path.exists(req):
                 check_call(cmd + ["--upgrade", "-r", req])
             # update scripts symlink
