@@ -202,8 +202,9 @@ def freeze():
     is_flag=True,
     help="Give the virtual environment access to the system site-packages dir.",
 )
+@click.option("-v", "--verbose", is_flag=True, help="Give more output.")
 @click.argument("name", nargs=-1, type=click.STRING)
-def install(requirement, dependency, system_site_packages, name):
+def install(requirement, dependency, system_site_packages, verbose, name):
     """
     Install packages, where NAME is the package name.
     You can specify multiple names.
@@ -230,7 +231,9 @@ def install(requirement, dependency, system_site_packages, name):
         for package in packages:
             package, version = _get_package_data(package)
             venv_dir, venv_py = _get_venv_data(package)
-            cmd = [venv_py, "-m", "pip", "install", "--quiet"]
+            cmd = [venv_py, "-m", "pip", "install"]
+            if not verbose:
+                cmd.append("--quiet")
             # create venv if not exists
             if not os.path.isdir(venv_dir):
                 create(
@@ -287,8 +290,9 @@ def install(requirement, dependency, system_site_packages, name):
     help="Confirm the action without prompting.",
 )
 @click.option("-r", "--requirement", help="Install from the given requirements file.")
+@click.option("-v", "--verbose", is_flag=True, help="Give more output.")
 @click.argument("name", nargs=-1, type=click.STRING)
-def update(requirement, name):
+def update(requirement, verbose, name):
     """
     Update packages, where NAME is the package name.
     You can specify multiple names.
@@ -317,7 +321,9 @@ def update(requirement, name):
             if not os.path.isdir(venv_dir):
                 message = "{} is not installed".format(package)
                 raise click.ClickException(message)
-            cmd = [venv_py, "-m", "pip", "install", "--quiet"]
+            cmd = [venv_py, "-m", "pip", "install"]
+            if not verbose:
+                cmd.append("--quiet")
             # upgrade pip in venv
             check_call(cmd + ["--upgrade", "pip"])
             # install package in venv
