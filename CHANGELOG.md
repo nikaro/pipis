@@ -62,7 +62,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Everything.
 
-[Unreleased]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.3.1...HEAD
+[Unreleased]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.4.0...HEAD
+[1.4.0]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.3.1...v1.4.0
 [1.3.1]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.3.0...v1.3.1
 [1.3.0]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.2.0...v1.3.0
 [1.2.0]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.1.0...1.2.0
