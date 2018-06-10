@@ -1,11 +1,8 @@
-from pathlib import Path
 import os
 import sys
 
 sys.path.append("..")
 
-import click
-import pipis
 from click.testing import CliRunner
 
 from helpers import set_env
@@ -114,9 +111,11 @@ def test_install_dependency_many_packages(tmpdir):
 
     packages = ["pipis", "pipsi"]
     dependency = "pylint"
+    msg = "cannot add dependecy to multiple packages"
 
-    result = runner.invoke(pipis.install, ["-y", " ".join(packages), "-d", dependency])
+    result = runner.invoke(pipis.install, ["-y", "-d", dependency] + packages)
 
+    assert msg in result.output
     assert result.exit_code != 0
 
 
@@ -183,7 +182,7 @@ def test_install_already_installed_package(tmpdir):
     script = os.path.join(venv, "bin", package)
     link = os.path.join(os.environ["PIPIS_BIN"], package)
 
-    msg = "is already installed, skip"
+    msg = "Installing"
 
     runner.invoke(pipis.install, ["-y", package])
     result = runner.invoke(pipis.install, ["-y", package])
@@ -195,33 +194,13 @@ def test_install_already_installed_package(tmpdir):
     assert result.exit_code == 0
 
 
-def test_install_already_exists_symlink(tmpdir):
-    set_env(tmpdir)
-
-    package = "pipis"
-    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
-    script = os.path.join(venv, "bin", package)
-    link = os.path.join(os.environ["PIPIS_BIN"], package)
-
-    msg = "{} already exists".format(link)
-
-    Path(link).touch()
-    result = runner.invoke(pipis.install, ["-y", package])
-
-    assert msg in result.output
-    assert not os.path.isdir(venv)
-    assert not os.path.isfile(script)
-    assert not os.path.islink(link)
-    assert result.exit_code != 0
-
-
 def test_install_requirements(tmpdir):
     set_env(tmpdir)
 
     package = "pipis"
     req = tmpdir.join("requirements.txt")
-    with open(req, "w") as f:
-        f.write(package)
+    with open(req, "w") as req_fh:
+        req_fh.write(package)
     venv = os.path.join(os.environ["PIPIS_VENVS"], package)
     script = os.path.join(venv, "bin", package)
     link = os.path.join(os.environ["PIPIS_BIN"], package)
@@ -253,8 +232,8 @@ def test_install_too_many_arg(tmpdir):
 
     package = "pipis"
     req = tmpdir.join("requirements.txt")
-    with open(req, "w") as f:
-        f.write(package)
+    with open(req, "w") as req_fh:
+        req_fh.write(package)
     venv = os.path.join(os.environ["PIPIS_VENVS"], package)
     script = os.path.join(venv, "bin", package)
     link = os.path.join(os.environ["PIPIS_BIN"], package)

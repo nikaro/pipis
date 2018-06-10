@@ -1,11 +1,8 @@
-from pathlib import Path
 import os
 import sys
 
 sys.path.append("..")
 
-import click
-import pipis
 from click.testing import CliRunner
 
 from helpers import set_env
@@ -67,8 +64,8 @@ def test_uninstall_requirements(tmpdir):
 
     package = "pipis"
     req = tmpdir.join("requirements.txt")
-    with open(req, "w") as f:
-        f.write(package)
+    with open(req, "w") as req_fh:
+        req_fh.write(package)
     venv = os.path.join(os.environ["PIPIS_VENVS"], package)
     script = os.path.join(venv, "bin", package)
     link = os.path.join(os.environ["PIPIS_BIN"], package)
@@ -101,8 +98,8 @@ def test_uninstall_too_many_arg(tmpdir):
 
     package = "pipis"
     req = tmpdir.join("requirements.txt")
-    with open(req, "w") as f:
-        f.write(package)
+    with open(req, "w") as req_fh:
+        req_fh.write(package)
     venv = os.path.join(os.environ["PIPIS_VENVS"], package)
     script = os.path.join(venv, "bin", package)
     link = os.path.join(os.environ["PIPIS_BIN"], package)
