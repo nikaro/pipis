@@ -1,9 +1,9 @@
-.PHONY: format lint test test_verbose docker build publish clean
+.PHONY: format lint test test_verbose docker install build dist-install publish clean
 
 all: lint test_verbose build
 
 format:
-	poetry run python -m black pipis/__init__.py
+	poetry run python -m black .
 
 lint:
 	poetry run python -m pylint pipis/__init__.py
@@ -17,10 +17,13 @@ test_verbose:
 docker:
 	docker-compose up
 
-build:
+install:
+	poetry install
+
+build: install
 	poetry build
 
-install: build
+dist-install: build
 	python -m venv --symlinks --upgrade ~/.local/venvs/pipis
 	~/.local/venvs/pipis/bin/pip install -I dist/pipis-*.whl
 
