@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Move some portion of code into separate functions to make the code easier to read
+- Updating an uninstalled package will install it, instead of failing
+- While creating symlinks, if the target already exists it will be replaced, instead of failing
+
+### Fixed
+- FIx some linting warnings
 
 ## [1.4.0]
 ### Added
