@@ -29,6 +29,7 @@ source ~/.local/venvs/pipis/bin/activate
 pip install -U pip
 pip install pipis
 deactivate
+mkdir -p ~/.local/bin
 ln -s ~/.local/venvs/pipis/bin/pipis ~/.local/bin/pipis
 ```
 
