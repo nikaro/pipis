@@ -20,6 +20,7 @@ DEFAULT_PIPIS_BIN = "~/.local/bin/"
 
 
 def get_pipis():
+    """Get pipis environment variables or fallback on defaults."""
     pipis_venvs = os.path.expanduser(os.environ.get("PIPIS_VENVS", DEFAULT_PIPIS_VENVS))
     pipis_bin = os.path.expanduser(os.environ.get("PIPIS_BIN", DEFAULT_PIPIS_BIN))
 
@@ -27,6 +28,7 @@ def get_pipis():
 
 
 def get_package(package):
+    """Normalize package name and version."""
     req = pkg_resources.Requirement(package)
     package_name = req.project_name
     package_spec = str(req.specifier)
@@ -35,6 +37,7 @@ def get_package(package):
 
 
 def get_venv(package):
+    """Get vevn path."""
     pipis_venvs, _ = get_pipis()
     venv_dir = os.path.join(pipis_venvs, package)
     venv_py = os.path.join(venv_dir, "bin", "python")
@@ -43,6 +46,7 @@ def get_venv(package):
 
 
 def get_dist(package):
+    """Get dist object for a given package."""
     venv_dir, venv_py = get_venv(package)
     # get the module path from its venv and append it to the current path
     cmd_path = [
@@ -66,12 +70,14 @@ def get_dist(package):
 
 
 def get_version(package):
+    """Get version number for a given package."""
     dist = get_dist(package)
 
     return dist.version
 
 
 def get_scripts(package):
+    """Get executables scripts for a given package."""
     venv_dir, _ = get_venv(package)
     # get informations about package
     dist = get_dist(package)
@@ -104,15 +110,18 @@ def get_scripts(package):
 
 
 def abort_if_false(ctx, _, value):
+    """Abort callback function."""
     if not value:
         ctx.abort()
 
 
 def show_package(package):
+    """Show package callback function."""
     return package
 
 
 def get_requirement(requirement):
+    """Get packages list of a given requirements file."""
     try:
         with open(requirement, "r") as req:
             return req.read().splitlines()
@@ -121,6 +130,7 @@ def get_requirement(requirement):
 
 
 def set_requirement(package, dependency):
+    """Create or append requirements files for a given package."""
     venv_dir, _ = get_venv(package)
     requirement = os.path.join(venv_dir, "requirements.txt")
     req_content = set()
@@ -139,6 +149,7 @@ def set_requirement(package, dependency):
 
 
 def venv(package, system=False, isupdate=False):
+    """Define venv options and create it."""
     package, _ = get_package(package)
     venv_dir, _ = get_venv(package)
     # create or update venv
@@ -154,6 +165,7 @@ def venv(package, system=False, isupdate=False):
 
 
 def install(package, verbose=False, isupdate=False):
+    """Install a given package into its venv."""
     package, version = get_package(package)
     venv_dir, venv_py = get_venv(package)
     # define pip install cmd
@@ -178,6 +190,7 @@ def install(package, verbose=False, isupdate=False):
 
 
 def install_dep(cmd, package, dependency=None):
+    """Install a given dependency package into the package venv."""
     package, _ = get_package(package)
     venv_dir, _ = get_venv(package)
     # set requirements file path
@@ -191,6 +204,7 @@ def install_dep(cmd, package, dependency=None):
 
 
 def link(package, isupdate=False):
+    """Create or update symlinks for a given package."""
     _, pipis_bin = get_pipis()
     package, _ = get_package(package)
     venv_dir, _ = get_venv(package)
@@ -218,6 +232,7 @@ def link(package, isupdate=False):
 
 
 def remove(package):
+    """Remove package venv and scripts."""
     pipis_venvs, pipis_bin = get_pipis()
     package, _ = get_package(package)
     venv_dir = os.path.join(pipis_venvs, package)
