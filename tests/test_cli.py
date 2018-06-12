@@ -2,7 +2,6 @@ import sys
 
 sys.path.append("..")
 
-import click
 from click.testing import CliRunner
 
 from helpers import set_env

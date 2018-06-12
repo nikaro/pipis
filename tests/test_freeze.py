@@ -2,7 +2,6 @@ import sys
 
 sys.path.append("..")
 
-import click
 from click.testing import CliRunner
 
 from helpers import set_env
@@ -16,7 +15,7 @@ def test_freeze(tmpdir):
 
     package = "pipis"
     runner.invoke(pipis.install, ["-y", package])
-    version = pipis._get_version(package)
+    version = pipis.lib.get_version(package)
     msg = "{}=={}".format(package, version)
 
     result = runner.invoke(pipis.freeze)

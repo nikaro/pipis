@@ -18,10 +18,10 @@ def test_get_pipis_default():
     del os.environ["PIPIS_VENVS"]
     del os.environ["PIPIS_BIN"]
     envvar = tuple(
-        map(os.path.expanduser, (pipis.DEFAULT_PIPIS_VENVS, pipis.DEFAULT_PIPIS_BIN))
+        map(os.path.expanduser, (pipis.lib.DEFAULT_PIPIS_VENVS, pipis.lib.DEFAULT_PIPIS_BIN))
     )
 
-    result = pipis._get_pipis()
+    result = pipis.lib.get_pipis()
 
     assert type(result) == type(tuple())
     assert result == envvar
@@ -34,7 +34,7 @@ def test_get_pipis_from_env(tmpdir):
         map(os.path.expanduser, (os.environ["PIPIS_VENVS"], os.environ["PIPIS_BIN"]))
     )
 
-    result = pipis._get_pipis()
+    result = pipis.lib.get_pipis()
 
     assert type(result) == type(tuple())
     assert result == envvar
@@ -45,7 +45,7 @@ def test_get_env_data(tmpdir):
 
     package = "pipis"
 
-    result = pipis._get_venv(package)
+    result = pipis.lib.get_venv(package)
     venv_dir = result[0]
     venv_py = result[1]
 
@@ -60,7 +60,7 @@ def test_get_dist(tmpdir):
     package = "pipis"
 
     runner.invoke(pipis.install, ["-y", package])
-    result = pipis._get_dist(package)
+    result = pipis.lib.get_dist(package)
 
     assert hasattr(result, "location")
     assert hasattr(result, "project_name")
@@ -76,7 +76,7 @@ def test_get_scripts(tmpdir):
     package = "pipis"
 
     runner.invoke(pipis.install, ["-y", package])
-    result = pipis._get_scripts(package)
+    result = pipis.lib.get_scripts(package)
 
     assert isinstance(result, list)
     assert os.path.isfile(result[0])
@@ -89,7 +89,7 @@ def test_version(tmpdir):
     package = "pipis"
 
     runner.invoke(pipis.install, ["-y", package])
-    result = pipis._get_version(package)
+    result = pipis.lib.get_version(package)
 
     assert re.match(r"^\d+\.\d+\.\d+", result)
 
@@ -98,10 +98,10 @@ def test_abort_if_false_none():
     ctx = click.Context(click.Command("hello"))
 
     with pytest.raises(click.exceptions.Abort):
-        pipis._abort_if_false(ctx, None, None)
+        pipis.lib.abort_if_false(ctx, None, None)
 
 
 def test_show_package():
-    result = pipis._show_package("hello")
+    result = pipis.lib.show_package("hello")
 
     assert result == "hello"
