@@ -18,7 +18,10 @@ def test_get_pipis_default():
     del os.environ["PIPIS_VENVS"]
     del os.environ["PIPIS_BIN"]
     envvar = tuple(
-        map(os.path.expanduser, (pipis.lib.DEFAULT_PIPIS_VENVS, pipis.lib.DEFAULT_PIPIS_BIN))
+        map(
+            os.path.expanduser,
+            (pipis.lib.DEFAULT_PIPIS_VENVS, pipis.lib.DEFAULT_PIPIS_BIN),
+        )
     )
 
     result = pipis.lib.get_pipis()
