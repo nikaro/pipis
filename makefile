@@ -6,7 +6,7 @@ format:
 	poetry run python -m black .
 
 lint:
-	poetry run python -m pylint pipis/__init__.py
+	poetry run python -m pylint pipis/
 
 test:
 	poetry run python -m pytest --cov=pipis/
