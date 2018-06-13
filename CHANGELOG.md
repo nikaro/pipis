@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Add `-I` or `--ignore-installed` option on `install` and `update` commands.
+- Add `-U` or `--upgrade` option on `install` command.
+
 ### Changed
 - Move some portion of code into separate functions to make the code easier to read
 - Updating an uninstalled package will install it, instead of failing

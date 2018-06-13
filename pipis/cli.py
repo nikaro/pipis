@@ -75,9 +75,11 @@ def freeze():
     is_flag=True,
     help="Give the virtual environment access to the system site-packages dir.",
 )
+@click.option("-U", "--upgrade", is_flag=True, help="Upgrade all specified packages to the newest available version.")
+@click.option("-I", "--ignore-installed", is_flag=True, help="Ignore the installed packages (reinstalling instead).")
 @click.option("-v", "--verbose", is_flag=True, help="Give more output.")
 @click.argument("name", nargs=-1, type=click.STRING)
-def install(requirement, dependency, system, verbose, name):
+def install(requirement, dependency, system, upgrade, ignore_installed, verbose, name):
     """
     Install packages, where NAME is the package name.
     You can specify multiple names.
@@ -102,7 +104,7 @@ def install(requirement, dependency, system, verbose, name):
     ) as packages:
         for package in packages:
             p.venv(package, system)
-            cmd = p.install(package, verbose)
+            cmd = p.install(package, verbose, upgrade, ignore_installed)
             p.install_dep(cmd, package, dependency)
             p.link(package)
 
@@ -118,9 +120,10 @@ def install(requirement, dependency, system, verbose, name):
     help="Confirm the action without prompting.",
 )
 @click.option("-r", "--requirement", help="Install from the given requirements file.")
+@click.option("-I", "--ignore-installed", is_flag=True, help="Ignore the installed packages (reinstalling instead).")
 @click.option("-v", "--verbose", is_flag=True, help="Give more output.")
 @click.argument("name", nargs=-1, type=click.STRING)
-def update(requirement, verbose, name):
+def update(requirement, ignore_installed, verbose, name):
     """
     Update packages, where NAME is the package name.
     You can specify multiple names.
@@ -144,10 +147,10 @@ def update(requirement, verbose, name):
         name, label="Updating", item_show_func=p.show_package
     ) as packages:
         for package in packages:
-            p.venv(package, isupdate=True)
-            cmd = p.install(package, verbose, isupdate=True)
+            p.venv(package, upgrade=True)
+            cmd = p.install(package, verbose, upgrade=True, ignore=ignore_installed)
             p.install_dep(cmd, package)
-            p.link(package, isupdate=True)
+            p.link(package, upgrade=True)
 
 
 @cli.command(context_settings=CONTEXT_SETTINGS, short_help="Uninstall packages.")

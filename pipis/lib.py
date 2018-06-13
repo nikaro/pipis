@@ -148,7 +148,7 @@ def set_requirement(package, dependency):
     return requirement
 
 
-def venv(package, system=False, isupdate=False):
+def venv(package, system=False, upgrade=False):
     """Define venv options and create it."""
     package, _ = get_package(package)
     venv_dir, _ = get_venv(package)
@@ -157,14 +157,14 @@ def venv(package, system=False, isupdate=False):
         system_site_packages=system,
         clear=False,
         symlinks=True,
-        upgrade=isupdate,
+        upgrade=upgrade,
         with_pip=True,
     )
-    if not os.path.isdir(venv_dir) or isupdate:
+    if not os.path.isdir(venv_dir) or upgrade:
         venv_build.create(venv_dir)
 
 
-def install(package, verbose=False, isupdate=False):
+def install(package, verbose=False, upgrade=False, ignore=False):
     """Install a given package into its venv."""
     package, version = get_package(package)
     venv_dir, venv_py = get_venv(package)
@@ -176,8 +176,11 @@ def install(package, verbose=False, isupdate=False):
     # upgrade pip in venv
     check_call(cmd + ["--upgrade", "pip"])
     # set upgrade
-    if isupdate:
+    if upgrade:
         cmd.append("--upgrade")
+    # set reinstall
+    if ignore:
+        cmd.append("--ignore-installed")
     # install package (and eventual dependencies) in venv
     try:
         check_call(cmd + [package + version])
@@ -203,7 +206,7 @@ def install_dep(cmd, package, dependency=None):
         check_call(cmd + ["--requirement", dependencies])
 
 
-def link(package, isupdate=False):
+def link(package, upgrade=False):
     """Create or update symlinks for a given package."""
     _, pipis_bin = get_pipis()
     package, _ = get_package(package)
@@ -221,7 +224,7 @@ def link(package, isupdate=False):
         if os.path.realpath(target) == script:
             # already exists
             continue
-        elif isupdate and not os.path.islink(target):
+        elif upgrade and not os.path.islink(target):
             # create
             os.symlink(script, target)
         else:
