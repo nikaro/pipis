@@ -10,12 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add `-U` or `--upgrade` option on `install` command.
 
 ### Changed
-- Move some portion of code into separate functions to make the code easier to read
-- Updating an uninstalled package will install it, instead of failing
-- While creating symlinks, if the target already exists it will be replaced, instead of failing
+- Move some portion of code into separate functions to make the code easier to read.
+- Updating an uninstalled package will install it, instead of failing.
+- While creating symlinks, if the target already exists it will be replaced, instead of failing.
 
 ### Fixed
-- FIx some linting warnings
+- Fix some linting warnings.
 
 ## [1.4.0]
 ### Added
@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.3.1]
 ### Fixed
-- Refactor environment variable retrieval
+- Refactor environment variable retrieval.
 
 ## [1.3.0]
 ### Added
@@ -37,10 +37,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Format `list` output like pip's one.
 
 ### Fixed
-- Remove venv created in case of inexistant package install attempt
-- Raise error when the package is a library (has no user script)
-- Raise error when the symlink destination already exists
-- Raise error when trying to update an inexistant package
+- Remove venv created in case of inexistant package install attempt.
+- Raise error when the package is a library (has no user script).
+- Raise error when the symlink destination already exists.
+- Raise error when trying to update an inexistant package.
 
 ## [1.2.0]
 ### Added
