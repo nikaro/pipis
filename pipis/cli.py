@@ -75,11 +75,21 @@ def freeze():
     is_flag=True,
     help="Give the virtual environment access to the system site-packages dir.",
 )
-@click.option("-U", "--upgrade", is_flag=True, help="Upgrade all specified packages to the newest available version.")
-@click.option("-I", "--ignore-installed", is_flag=True, help="Ignore the installed packages (reinstalling instead).")
+@click.option(
+    "-U",
+    "--upgrade",
+    is_flag=True,
+    help="Upgrade all specified packages to the newest available version.",
+)
+@click.option(
+    "-I",
+    "--ignore-installed",
+    is_flag=True,
+    help="Ignore the installed packages (reinstalling instead).",
+)
 @click.option("-v", "--verbose", is_flag=True, help="Give more output.")
 @click.argument("name", nargs=-1, type=click.STRING)
-def install(requirement, dependency, system, upgrade, ignore_installed, verbose, name):
+def install(**kwargs):
     """
     Install packages, where NAME is the package name.
     You can specify multiple names.
@@ -87,25 +97,30 @@ def install(requirement, dependency, system, upgrade, ignore_installed, verbose,
     Packages names and "requirements files" are mutually exclusive.
     """
     # check presence of args
-    if not (requirement or name):
+    if not (kwargs["requirement"] or kwargs["name"]):
         raise click.UsageError("missing arguments/options")
     # check mutually esclusive args
-    if requirement and name:
+    if kwargs["requirement"] and kwargs["name"]:
         raise click.UsageError("too many arguments/options")
     # populate packages list with req file
-    if requirement:
-        name = p.get_requirement(requirement)
+    if kwargs["requirement"]:
+        kwargs["name"] = p.get_requirement(kwargs["requirement"])
     # do not add dependency to multiple packages
-    if len(name) > 1 and dependency:
+    if len(kwargs["name"]) > 1 and kwargs["dependency"]:
         raise click.UsageError("cannot add dependecy to multiple packages")
     # process packages
     with click.progressbar(
-        name, label="Installing", item_show_func=p.show_package
+        kwargs["name"], label="Installing", item_show_func=p.show_package
     ) as packages:
         for package in packages:
-            p.venv(package, system)
-            cmd = p.install(package, verbose, upgrade, ignore_installed)
-            p.install_dep(cmd, package, dependency)
+            p.venv(package, kwargs["system"])
+            cmd = p.install(
+                package,
+                kwargs["verbose"],
+                kwargs["upgrade"],
+                kwargs["ignore_installed"],
+            )
+            p.install_dep(cmd, package, kwargs["dependency"])
             p.link(package)
 
 
@@ -120,10 +135,15 @@ def install(requirement, dependency, system, upgrade, ignore_installed, verbose,
     help="Confirm the action without prompting.",
 )
 @click.option("-r", "--requirement", help="Install from the given requirements file.")
-@click.option("-I", "--ignore-installed", is_flag=True, help="Ignore the installed packages (reinstalling instead).")
+@click.option(
+    "-I",
+    "--ignore-installed",
+    is_flag=True,
+    help="Ignore the installed packages (reinstalling instead).",
+)
 @click.option("-v", "--verbose", is_flag=True, help="Give more output.")
 @click.argument("name", nargs=-1, type=click.STRING)
-def update(requirement, ignore_installed, verbose, name):
+def update(**kwargs):
     """
     Update packages, where NAME is the package name.
     You can specify multiple names.
@@ -135,20 +155,25 @@ def update(requirement, ignore_installed, verbose, name):
     """
     pipis_venvs, _ = p.get_pipis()
     # check mutually esclusive args
-    if requirement and name:
+    if kwargs["requirement"] and kwargs["name"]:
         raise click.UsageError("too many arguments/options")
     # populate packages list with req file
-    if requirement:
-        name = p.get_requirement(requirement)
+    if kwargs["requirement"]:
+        kwargs["name"] = p.get_requirement(kwargs["requirement"])
     # populate packages list with all currently installed
-    if not name:
-        name = os.listdir(pipis_venvs)
+    if not kwargs["name"]:
+        kwargs["name"] = os.listdir(pipis_venvs)
     with click.progressbar(
-        name, label="Updating", item_show_func=p.show_package
+        kwargs["name"], label="Updating", item_show_func=p.show_package
     ) as packages:
         for package in packages:
             p.venv(package, upgrade=True)
-            cmd = p.install(package, verbose, upgrade=True, ignore=ignore_installed)
+            cmd = p.install(
+                package,
+                kwargs["verbose"],
+                upgrade=True,
+                ignore=kwargs["ignore_installed"],
+            )
             p.install_dep(cmd, package)
             p.link(package, upgrade=True)
 
@@ -165,7 +190,7 @@ def update(requirement, ignore_installed, verbose, name):
 )
 @click.option("-r", "--requirement", help="Install from the given requirements file.")
 @click.argument("name", nargs=-1, type=click.STRING)
-def uninstall(requirement, name):
+def uninstall(**kwargs):
     """
     Uninstall packages, where NAME is the package name.
     You can specify multiple names.
@@ -173,16 +198,16 @@ def uninstall(requirement, name):
     Packages names and "requirements files" are mutually exclusive.
     """
     # check presence of args
-    if not (requirement or name):
+    if not (kwargs["requirement"] or kwargs["name"]):
         raise click.UsageError("missing arguments/options")
     # check mutually esclusive args
-    if requirement and name:
+    if kwargs["requirement"] and kwargs["name"]:
         raise click.UsageError("too many arguments/options")
     # populate packages list with req file
-    if requirement:
-        name = p.get_requirement(requirement)
+    if kwargs["requirement"]:
+        kwargs["name"] = p.get_requirement(kwargs["requirement"])
     with click.progressbar(
-        name, label="Removing", item_show_func=p.show_package
+        kwargs["name"], label="Removing", item_show_func=p.show_package
     ) as packages:
         for package in packages:
             p.remove(package)
