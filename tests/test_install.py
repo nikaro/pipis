@@ -106,6 +106,28 @@ def test_install_add_dependency(tmpdir):
     assert result.exit_code == 0
 
 
+def test_install_add_dependency_again(tmpdir):
+    set_env(tmpdir)
+
+    package = "pipis"
+    dependency = "pylint"
+    new_dependency = "pytest"
+    venv = os.path.join(os.environ["PIPIS_VENVS"], package)
+    dep_req = os.path.join(venv, "requirements.txt")
+    dep_dir = os.path.join(venv, "lib", "python3.6", "site-packages", new_dependency)
+
+    runner.invoke(pipis.install, ["-y", package])
+    runner.invoke(pipis.install, ["-y", package, "-d", dependency])
+    result = runner.invoke(pipis.install, ["-y", package, "-d", new_dependency])
+
+    with open(dep_req) as req:
+        dep_req_content = req.read().splitlines()
+
+    assert "Installing" in result.output
+    assert new_dependency in dep_req_content
+    assert result.exit_code == 0
+
+
 def test_install_dependency_many_packages(tmpdir):
     set_env(tmpdir)
 
