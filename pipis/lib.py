@@ -164,6 +164,23 @@ def venv(package, system=False, upgrade=False):
         venv_build.create(venv_dir)
 
 
+def search(query, verbose):
+    """Search a given package into PyPI."""
+    _, venv_py = get_venv("pipis")
+    # define pip install cmd
+    cmd = [venv_py, "-m", "pip", "search", query]
+    # set verbosity
+    if verbose:
+        cmd.append("--verbose")
+    try:
+        check_call(cmd)
+    except CalledProcessError:
+        message = "Cannot find {}".format(query)
+        raise click.BadArgumentUsage(message)
+
+    return cmd
+
+
 def install(package, verbose=False, upgrade=False, ignore=False):
     """Install a given package into its venv."""
     package, version = get_package(package)

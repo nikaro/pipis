@@ -55,6 +55,16 @@ def freeze():
         click.echo("{}=={}".format(package, package_version))
 
 
+@cli.command(context_settings=CONTEXT_SETTINGS, short_help="Search PyPI for packages.")
+@click.option("-v", "--verbose", is_flag=True, help="Give more output.")
+@click.argument("query", nargs=1, type=click.STRING)
+def search(**kwargs):
+    """
+    Search for PyPI packages whose name or summary contains <query>.
+    """
+    p.search(kwargs["query"], kwargs["verbose"])
+
+
 @cli.command(context_settings=CONTEXT_SETTINGS, short_help="Install packages.")
 @click.option(
     "-y",

@@ -2,13 +2,23 @@
 'pipis' stands for 'pip isolated'
 """
 
-from .cli import cli, show_version, list_installed, freeze, install, update, uninstall
+from .cli import (
+    cli,
+    show_version,
+    list_installed,
+    freeze,
+    search,
+    install,
+    update,
+    uninstall,
+)
 
 __all__ = [
     "cli",
     "show_version",
     "list_installed",
     "freeze",
+    "search",
     "install",
     "update",
     "uninstall",
