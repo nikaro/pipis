@@ -1,60 +1,35 @@
-import re
 import sys
 
-sys.path.append("..")
-
-from click.testing import CliRunner
-
-from helpers import set_env
-import pipis
-
-runner = CliRunner()
+from helpers import Args, set_env
+from pipis.__main__ import main
+from pipis.utils import Pipis
 
 
-def test_search(tmpdir):
-    set_env(tmpdir)
+def test_search(tmp_path, capsys):
+    set_env(tmp_path)
+    p = Pipis()
+    args = Args()
+    p.install(args)
 
-    runner.invoke(pipis.install, ["-y", "pipis"])
+    package = "pipis"
+    sys.argv = ["pipis", "search", package]
+    main()
+    captured = capsys.readouterr()
 
-    result = runner.invoke(pipis.search, ["pipis"])
-
-    assert result.exit_code == 0
-
-
-def test_search_verbose(tmpdir):
-    set_env(tmpdir)
-
-    msg = "Starting new HTTP"
-
-    runner.invoke(pipis.install, ["-y", "pipis"])
-
-    result = runner.invoke(pipis.search, ["-v", "pipis"])
-
-    # assert msg in result.output
-    assert result.exit_code == 0
+    assert "not found" not in captured.out
+    assert package in captured.out
 
 
-def test_search_missing_arg(tmpdir):
-    set_env(tmpdir)
+def test_search_inexistant(tmp_path, capsys):
+    set_env(tmp_path)
+    p = Pipis()
+    args = Args()
+    p.install(args)
+    capsys.readouterr()  # reset capture
 
-    msg = "Missing argument"
+    package = "pipistache"
+    sys.argv = ["pipis", "search", package]
+    main()
+    captured = capsys.readouterr()
 
-    runner.invoke(pipis.install, ["-y", "pipis"])
-
-    result = runner.invoke(pipis.search)
-
-    assert msg in result.output
-    assert result.exit_code != 0
-
-
-def test_search_inexistant(tmpdir):
-    set_env(tmpdir)
-
-    msg = "Cannot find"
-
-    runner.invoke(pipis.install, ["-y", "pipis"])
-
-    result = runner.invoke(pipis.search, ["pipistache"])
-
-    assert msg in result.output
-    assert result.exit_code != 0
+    assert captured.out == f"Package '{package}' not found\n"

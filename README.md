@@ -1,8 +1,8 @@
 # PIPIS
 
-| **tests** | [![pipeline status](https://gitlab.com/NicolasKAROLAK/pipis/badges/master/pipeline.svg)](https://gitlab.com/NicolasKAROLAK/pipis/commits/master) [![coverage report](https://gitlab.com/NicolasKAROLAK/pipis/badges/master/coverage.svg)](https://gitlab.com/NicolasKAROLAK/pipis/commits/master) |
+| **tests** | [![Build Status](https://travis-ci.org/nikaro/pipis.svg?branch=master)](https://travis-ci.org/nikaro/pipis) |
 |-|-|
-| **package** | [![PyPI version](https://img.shields.io/pypi/v/pipis.svg)](https://pypi.org/project/pipis) [![Supported versions](https://img.shields.io/pypi/pyversions/pipis.svg)](https://pypi.org/project/pipis) [![PyPI - Status](https://img.shields.io/pypi/status/pipis.svg)](https://gitlab.com/NicolasKAROLAK/pipis) |
+| **package** | [![PyPI version](https://img.shields.io/pypi/v/pipis.svg)](https://pypi.org/project/pipis) [![Supported versions](https://img.shields.io/pypi/pyversions/pipis.svg)](https://pypi.org/project/pipis) [![PyPI - Status](https://img.shields.io/pypi/status/pipis.svg)](https://github.com/nikaro/pipis) |
 
 ## Somewhere between pip and pipsi
 
@@ -23,14 +23,46 @@ Because i do not care about Python 2, and `virtualenv` copies python's binaries 
 
 ## How to install
 
+### Automatic
+
+Coming soon…
+
+### Manual
+
+Create the pipis venvs and bin directories:
+```sh
+mkdir -p ~/.local/share/pipis/{venvs,bin}
 ```
-python3 -m venv ~/.local/venvs/pipis
-source ~/.local/venvs/pipis/bin/activate
+
+Create and activate the pipis virtual environment:
+```sh
+python3 -m venv ~/.local/share/pipis/venvs/pipis
+source ~/.local/share/pipis/venvs/pipis/bin/activate
+```
+
+Upgrade the pip package:
+```sh
 pip install -U pip
+```
+
+Install pipis:
+```sh
 pip install pipis
+```
+
+Exit the virtual environment:
+```sh
 deactivate
-mkdir -p ~/.local/bin
-ln -s ~/.local/venvs/pipis/bin/pipis ~/.local/bin/pipis
+```
+
+Link the pipis script into the "global" bin directory:
+```sh
+ln -s ~/.local/share/pipis/venvs/pipis/bin/pipis ~/.local/share/pipis/bin/
+```
+
+Add the pipis "global" bin directory to your PATH:
+```sh
+export PATH="~/.local/share/pipis/bin:${PATH}"
 ```
 
 ## How to update
@@ -134,4 +166,4 @@ Removing  [####################################]  100%
 ## Credits
 
 - [Armin Ronacher](https://github.com/mitsuhiko): the author of pipsi, for the inspiration
-- [Nicolas Karolak](): myself, the author of pipis
+- [Nicolas Karolak](https://github.com/nikaro): myself, the author of pipis

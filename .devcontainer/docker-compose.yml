@@ -1,0 +1,21 @@
+---
+
+version: '3'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspace
+      - ~/.config/git/config:/root/.config/git/config
+      - ~/.config/git/ignore:/root/.config/git/ignore
+      - ${SSH_AUTH_SOCK}:/ssh-agent
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - SSH_AUTH_SOCK=/ssh-agent
+    working_dir: /workspace
+    command: sleep infinity
+
+...

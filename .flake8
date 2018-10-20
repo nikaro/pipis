@@ -1,0 +1,13 @@
+[flake8]
+exclude =
+    build/
+    dist/
+    tests/
+    *.egg-info/
+    */migrations/*.py
+    .tox/
+    .venv/
+    .git/
+    .eggs/
+max-line-length = 88
+per-file-ignores =

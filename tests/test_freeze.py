@@ -1,24 +1,18 @@
 import sys
 
-sys.path.append("..")
-
-from click.testing import CliRunner
-
 from helpers import set_env
-import pipis
-
-runner = CliRunner()
+from pipis.__main__ import main
 
 
-def test_freeze(tmpdir):
-    set_env(tmpdir)
-
+def test_freeze(tmp_path, capsys):
+    set_env(tmp_path)
+    # install a package before test
     package = "pipis"
-    runner.invoke(pipis.install, ["-y", package])
-    version = pipis.lib.get_version(package)
-    msg = "{}=={}".format(package, version)
+    sys.argv = ["pipis", "install", "-y", package]
+    main()
 
-    result = runner.invoke(pipis.freeze)
+    sys.argv = ["pipis", "freeze"]
+    main()
+    captured = capsys.readouterr()
 
-    assert msg in result.output
-    assert result.exit_code == 0
+    assert f"{package}==" in captured.out

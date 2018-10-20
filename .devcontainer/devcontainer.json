@@ -1,0 +1,17 @@
+{
+  "name": "pipis",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "postCreateCommand": "make develop",
+  // "settings":  { "workbench.colorTheme": "Quiet Light" },
+  "extensions": [
+    // editor
+    "editorconfig.editorconfig",
+    "mikestead.dotenv",
+    // python
+    "ms-python.python",
+    // docker
+    "peterjausovec.vscode-docker"
+  ]
+}

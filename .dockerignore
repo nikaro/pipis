@@ -1,8 +1,11 @@
+.coverage
 .pytest_cache/
+.venv/
 .vscode/
+build/
 dist/
-pipis/__pycache__/
-pipis/*.pyc
+src/pipis/__pycache__/
+src/pipis/*.egg-info/
+src/pipis/*.pyc
 tests/__pycache__/
 tests/*.pyc
-.coverage
