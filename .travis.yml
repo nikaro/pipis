@@ -4,7 +4,8 @@ language: python
 python:
   - "3.6"
 install:
-  - curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+  - pip install -U pip
+  - pip install poetry
   - poetry install
 script:
   - make lint
