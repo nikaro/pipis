@@ -15,7 +15,7 @@ Actually it is a rewrite of [pipsi](https://github.com/mitsuhiko/pipsi) but with
 
 Pipis is a wrapper around venv and pip which installs scripts provided by python packages into separate venvs to shield them from your system and each other.
 
-It creates a venv in `~/.local/venvs/`, update pip, installs the package, and links the package's scripts to `~/.local/bin/`. These directory can be changed respectively through the environment variables `PIPIS_VENVS` and `PIPIS_BIN`.
+It creates a venv in `~/.local/share/pipis/venvs/`, update pip, installs the package, and links the package's scripts to `~/.local/share/pipis/bin/`. These directory can be changed respectively through the environment variables `PIPIS_VENVS` and `PIPIS_BIN`.
 
 ## Why not pipsi?
 
@@ -82,17 +82,27 @@ pipis uninstall pipis
 ### Show help
 
 ```
-$ pipis --help
-Usage: pipis [OPTIONS] COMMAND [ARGS]...
+$ pipis -h
+usage: pipis [-h] [-v] {version,freeze,search,install,update,uninstall} ...
 
-Options:
-  --help  Show this message and exit.
+Pipis installs Python packages into their own dedicated virtualenv to shield
+them from your system and from each other. Virtualenvs are created in
+`PIPIS_VENVS` (default: `~/.local/share/pipis/<package>`) and links the
+scripts to `PIPIS_BIN` (default: `~/.local/share/pipis/bin/`).
 
-Commands:
-  install
-  list
-  uninstall
-  update
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --verbose         enable verbose ouput
+
+available commands:
+  {version,freeze,search,install,update,uninstall}
+    version             show pipis version
+    freeze              output installed packages in requirements format
+    search              search for PyPI packages whose name or summary
+                        contains <query>
+    install             install packages
+    update              update packages
+    uninstall           uninstall packages
 ```
 
 You can also invoke `--help` on each commands.
@@ -101,66 +111,50 @@ You can also invoke `--help` on each commands.
 
 ```
 $ pipis install ansible
-Do you want to continue? [y/N]: y
-Installing  [####################################]  100%
-```
-
-You can install multiple packages:
-
-```
-$ pipis install ansible ansible-lint jmespath
-Do you want to continue? [y/N]: y
-Installing  [####################################]  100%
+Package 'ansible' will be installed.
+Do you want to continue [y/N]? y
+Successfully installed ansible
 ```
 
 ### Unattended install package(s)
 
 ```
-$ pipis install --yes awscli
-Installing  [####################################]  100%
+$ pipis install -y awscli
+Successfully installed awscli
 ```
 
 ### Update package(s)
 
 ```
 $ pipis update ansible
-Do you want to continue? [y/N]: y
-Updating  [####################################]  100%
-```
-
-You can also update all installed packages at once:
-
-```
-$ pipis update
-Do you want to continue? [y/N]: y
-Updating  [####################################]  100%
+Package 'ansible' will be updated.
+Do you want to continue [y/N]? y
+Successfully updated ansible
 ```
 
 ### List installed packages
 
 ```
-$ pipis list
-Installed:
-  - ansible
-  - ansible-lint
-  - awscli
-  - bashate
-  - docker-compose
-  - flake8
-  - jmespath
-  - pipis
-  - poetry
-  - pylint
-  - python-language-server
-  - twine
+$ pipis freeze
+ansible==2.8.1
+awscli==1.16.181
+gcal2redmine==0.2.0
+gitignore-cli==1.0.3
+pipenv==2018.11.26
+pipis==2.0.0
+poetry==0.12.16
+speedtest-cli==2.1.1
+tldr==0.4.4
+youtube-dl==2019.6.8
 ```
 
 ### Uninstall package(s)
 
 ```
 $ pipis uninstall ansible
-Do you want to continue? [y/N]: y
-Removing  [####################################]  100%
+Package 'ansible' will be uninstalled.
+Do you want to continue [y/N]? y
+Successfully uninstalled ansible
 ```
 
 ## Credits

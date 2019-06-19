@@ -38,6 +38,6 @@ publish_dry: build
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*.{whl,tar.gz}
 
 clean:
-	rm -rf .eggs/ .pytest_cache/ build/ dist/ src/*.egg-info/ .coverage
+	rm -rf .eggs/ .pytest_cache/ .tox/ build/ dist/ src/*.egg-info/ .coverage
 	find . -type f -name *.pyc -delete
 	find . -type d -name __pycache__ -delete

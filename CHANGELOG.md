@@ -5,8 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.0.0]
 ### Added
 - Add `search` command, to search packages on PyPI.
+
+### Changed
+- Complete rewrite with argparse (removing depency to Click)
+
+### Removed
+- The `list` command, it had no real purpose
+- The possibility to install multiple package at once, will be re-added later
+- The possibility to upgrade all package with `pipis update`, will be re-added later
 
 ## [1.5.0]
 ### Added
@@ -77,7 +87,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Everything.
 
-[Unreleased]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.5.0...HEAD
+[Unreleased]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v2.0.0...HEAD
+[2.0.0]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.5.0...v2.0.0
 [1.5.0]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.4.0...v1.5.0
 [1.4.0]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.3.1...v1.4.0
 [1.3.1]: https://gitlab.com/NicolasKAROLAK/pipis/compare/v1.3.0...v1.3.1
