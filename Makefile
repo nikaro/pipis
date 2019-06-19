@@ -29,13 +29,13 @@ install: build
 	~/.local/share/pipis/venvs/pipis/bin/pip install -U pip wheel
 	~/.local/share/pipis/venvs/pipis/bin/pip install -I dist/pipis-*.whl
 
-publish: build
+publish: clean build
 	twine check dist/*.{whl,tar.gz}
-	twine upload dist/*.{whl,tar.gz}
+	twine upload --skip-existing dist/*.{whl,tar.gz}
 
-publish_dry: build
+publish_dry: clean build
 	twine check dist/*.{whl,tar.gz}
-	twine upload --repository-url https://test.pypi.org/legacy/ dist/*.{whl,tar.gz}
+	twine upload --skip-existing --repository-url https://test.pypi.org/legacy/ dist/*.{whl,tar.gz}
 
 clean:
 	rm -rf .eggs/ .pytest_cache/ .tox/ build/ dist/ src/*.egg-info/ .coverage
